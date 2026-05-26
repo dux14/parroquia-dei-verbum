@@ -1,7 +1,59 @@
-import { useTranslations } from "next-intl";
+import { getTranslations } from "next-intl/server";
+import { Link } from "@/i18n/navigation";
+import {
+  getLiturgicalCalendar,
+  parseSaint,
+  extractReadingBody,
+} from "@/lib/ordo";
 
-export default function VidaParroquialPage() {
-  const t = useTranslations("ParishLife");
+const pastoralGroups = [
+  {
+    name: "Revolución Juvenil",
+    icon: "bolt",
+    color: "bg-[#FF6B35]",
+    desc: "Movimiento juvenil parroquial que busca transformar la vida de los jóvenes a través del encuentro con Cristo, la formación en la fe y el servicio a la comunidad.",
+    tag: "Jóvenes",
+  },
+  {
+    name: "Emaús",
+    icon: "directions_walk",
+    color: "bg-[#8B6914]",
+    desc: "Comunidad de discípulos que caminan juntos en la fe, inspirados en el encuentro de los discípulos con Jesús resucitado en el camino a Emaús.",
+    tag: "Comunidad",
+  },
+  {
+    name: "Hakuna",
+    icon: "music_note",
+    color: "bg-[#1E88E5]",
+    desc: "Grupo de alabanza y adoración que vive la fe con alegría a través de la música, la oración y el testimonio. Inspirado en el movimiento católico nacido en España.",
+    tag: "Alabanza",
+  },
+  {
+    name: "Patah",
+    icon: "door_open",
+    color: "bg-[#7B1FA2]",
+    desc: "Movimiento de evangelización que abre puertas al encuentro con Dios. Su nombre en hebreo significa 'abrir', invitando a todos a abrirse a la gracia.",
+    tag: "Evangelización",
+  },
+  {
+    name: "Legión de María",
+    icon: "star",
+    color: "bg-[#0D47A1]",
+    desc: "Asociación mariana de fieles católicos que, bajo la guía de María, se dedican al servicio de la Iglesia y la evangelización mediante la oración y el apostolado activo.",
+    tag: "Mariano",
+  },
+  {
+    name: "Movimiento de Schoenstatt",
+    icon: "home",
+    color: "bg-[#2E7D32]",
+    desc: "Movimiento apostólico mariano que busca la renovación espiritual mediante la alianza de amor con la Virgen María y la formación de cristianos libres y comprometidos.",
+    tag: "Mariano",
+  },
+];
+
+export default async function VidaParroquialPage() {
+  const t = await getTranslations("ParishLife");
+  const liturgicalDays = await getLiturgicalCalendar();
 
   return (
     <main className="max-w-[1200px] mx-auto px-4 md:px-6 pb-20">
@@ -27,25 +79,35 @@ export default function VidaParroquialPage() {
             {t("groupsTitle")}
           </h2>
           <div className="w-16 h-1 bg-altar-gold mx-auto mt-4 rounded-full" />
+          <p className="text-[16px] leading-[24px] text-on-surface-variant max-w-2xl mx-auto mt-4">
+            Conoce los grupos que hacen vida en nuestra parroquia y encuentra tu lugar en la comunidad.
+          </p>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {[
-            { icon: "groups", title: t("youthTitle"), desc: t("youthDesc") },
-            { icon: "family_restroom", title: t("familiesTitle"), desc: t("familiesDesc") },
-            { icon: "elderly", title: t("seniorsTitle"), desc: t("seniorsDesc") },
-          ].map((group) => (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {pastoralGroups.map((group) => (
             <div
-              key={group.title}
-              className="bg-surface-mist rounded-xl p-8 soft-shadow hover:-translate-y-1 transition-transform duration-300 relative overflow-hidden group"
+              key={group.name}
+              className="bg-surface-container-lowest rounded-xl soft-shadow hover:-translate-y-1 transition-transform duration-300 relative overflow-hidden group/card border border-outline-variant/10"
             >
-              <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
-                <span className="material-symbols-outlined" style={{ fontSize: "80px" }}>{group.icon}</span>
+              {/* Logo placeholder — replace with actual group logos */}
+              <div className="h-32 bg-gradient-to-br from-surface-mist to-surface-container-low flex items-center justify-center relative">
+                <div className={`w-16 h-16 ${group.color} rounded-2xl flex items-center justify-center shadow-md`}>
+                  <span className="material-symbols-outlined text-white text-[32px]">{group.icon}</span>
+                </div>
+                <span className="absolute top-3 right-3 bg-surface/80 backdrop-blur-sm text-on-surface-variant px-2.5 py-1 rounded-full text-xs font-semibold tracking-wide">
+                  {group.tag}
+                </span>
               </div>
-              <h3 className="font-headline text-[24px] leading-[32px] font-semibold text-primary mb-3">{group.title}</h3>
-              <p className="text-[16px] leading-[24px] text-on-surface-variant mb-6">{group.desc}</p>
-              <a className="inline-flex items-center gap-2 text-primary font-semibold text-[14px] tracking-[0.05em] group-hover:text-altar-gold transition-colors" href="#">
-                Más Información <span className="material-symbols-outlined text-sm">arrow_forward</span>
-              </a>
+              <div className="p-6">
+                <h3 className="font-headline text-[20px] leading-[28px] font-semibold text-primary mb-3">{group.name}</h3>
+                <p className="text-[14px] leading-[22px] text-on-surface-variant mb-5">{group.desc}</p>
+                <a
+                  className="inline-flex items-center gap-2 text-primary font-semibold text-[14px] tracking-[0.05em] group-hover/card:text-altar-gold transition-colors"
+                  href="#"
+                >
+                  Más Información <span className="material-symbols-outlined text-sm">arrow_forward</span>
+                </a>
+              </div>
             </div>
           ))}
         </div>
@@ -53,60 +115,83 @@ export default function VidaParroquialPage() {
 
       {/* Directorio de Ministerios */}
       <section className="mb-20">
-        <div className="bg-surface-mist rounded-2xl p-8 md:p-12 border border-outline-variant/30 soft-shadow">
-          <div className="text-center mb-10">
-            <h2 className="font-headline text-[32px] leading-[40px] font-semibold text-primary">
-              {t("ministryTitle")}
-            </h2>
-            <div className="w-16 h-1 bg-altar-gold mx-auto mt-4 mb-6 rounded-full" />
-            <p className="text-[16px] leading-[24px] text-on-surface-variant max-w-2xl mx-auto">
-              Nuestra parroquia prospera gracias a la dedicación de nuestros voluntarios. Descubra cómo puede servir a Dios y a nuestra comunidad.
-            </p>
+        <div className="rounded-2xl overflow-hidden soft-shadow relative">
+          {/* Background image area */}
+          <div className="h-48 md:h-64 bg-gradient-to-br from-primary/20 via-primary/10 to-pew-oak/10 flex items-center justify-center relative">
+            <span className="material-symbols-outlined text-white/10 text-[200px] absolute">church</span>
+            <div className="absolute inset-0 bg-gradient-to-b from-transparent to-surface-mist/95" />
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-10">
-            {[
-              { icon: "menu_book", title: t("lectorsTitle"), desc: "Proclaman la Palabra de Dios durante la Misa, ayudando a la congregación a escuchar y reflexionar sobre las Escrituras." },
-              { icon: "local_dining", title: t("eucharistMinistersTitle"), desc: "Asisten al sacerdote en la distribución del Cuerpo y la Sangre de Cristo durante las celebraciones eucarísticas." },
-              { icon: "school", title: t("catechesisTitle"), desc: "Guían a niños, jóvenes y adultos en su preparación para recibir los sacramentos y profundizar su fe católica." },
-            ].map((ministry) => (
-              <div key={ministry.title} className="flex flex-col gap-3">
-                <div className="w-12 h-12 bg-primary-container/10 text-primary rounded-full flex items-center justify-center mb-2">
-                  <span className="material-symbols-outlined">{ministry.icon}</span>
+
+          <div className="bg-surface-mist p-8 md:p-12 -mt-16 relative z-10">
+            <div className="text-center mb-10">
+              <h2 className="font-headline text-[32px] leading-[40px] font-semibold text-primary">
+                {t("ministryTitle")}
+              </h2>
+              <div className="w-16 h-1 bg-altar-gold mx-auto mt-4 mb-6 rounded-full" />
+              <p className="text-[16px] leading-[24px] text-on-surface-variant max-w-2xl mx-auto">
+                Nuestra parroquia prospera gracias a la dedicación de nuestros voluntarios. Descubra cómo puede servir a Dios y a nuestra comunidad.
+              </p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-10">
+              {[
+                { icon: "menu_book", title: t("lectorsTitle"), desc: "Proclaman la Palabra de Dios durante la Misa, ayudando a la congregación a escuchar y reflexionar sobre las Escrituras." },
+                { icon: "local_dining", title: t("eucharistMinistersTitle"), desc: "Asisten al sacerdote en la distribución del Cuerpo y la Sangre de Cristo durante las celebraciones eucarísticas." },
+                { icon: "school", title: t("catechesisTitle"), desc: "Guían a niños, jóvenes y adultos en su preparación para recibir los sacramentos y profundizar su fe católica." },
+              ].map((ministry) => (
+                <div key={ministry.title} className="bg-surface-container-lowest rounded-xl p-6 soft-shadow flex flex-col gap-3">
+                  <div className="w-12 h-12 bg-primary/10 text-primary rounded-full flex items-center justify-center mb-2">
+                    <span className="material-symbols-outlined">{ministry.icon}</span>
+                  </div>
+                  <h3 className="font-headline text-[20px] leading-7 font-semibold text-primary">{ministry.title}</h3>
+                  <p className="text-[14px] leading-[22px] text-on-surface-variant">{ministry.desc}</p>
                 </div>
-                <h3 className="font-headline text-[20px] leading-7 font-semibold text-primary">{ministry.title}</h3>
-                <p className="text-[16px] leading-[24px] text-on-surface-variant">{ministry.desc}</p>
-              </div>
-            ))}
-          </div>
-          <div className="text-center border-t border-outline-variant/30 pt-8">
-            <h4 className="font-headline text-xl text-on-surface mb-4">¿Siente el llamado a servir?</h4>
-            <a className="inline-flex items-center gap-2 bg-primary hover:bg-primary-container text-on-primary font-semibold text-[14px] tracking-[0.05em] px-6 py-3 rounded-full transition-all shadow-sm hover:shadow-md" href="#">
-              {t("joinMinistry")} <span className="material-symbols-outlined text-sm">arrow_forward</span>
-            </a>
+              ))}
+            </div>
+            <div className="text-center border-t border-outline-variant/30 pt-8">
+              <h4 className="font-headline text-xl text-on-surface mb-4">¿Siente el llamado a servir?</h4>
+              <a className="inline-flex items-center gap-2 bg-primary hover:bg-primary-container text-on-primary font-semibold text-[14px] tracking-[0.05em] px-6 py-3 rounded-full transition-all shadow-sm hover:shadow-md" href="#">
+                {t("joinMinistry")} <span className="material-symbols-outlined text-sm">arrow_forward</span>
+              </a>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Galeria */}
+      {/* Galería */}
       <section className="mb-20">
         <div className="text-center mb-12">
           <h2 className="font-headline text-[32px] leading-[40px] font-semibold text-primary">
             {t("galleryTitle")}
           </h2>
           <div className="w-16 h-1 bg-altar-gold mx-auto mt-4 rounded-full" />
+          <p className="text-[16px] leading-[24px] text-on-surface-variant max-w-2xl mx-auto mt-4">
+            Momentos de fe, comunidad y celebración en nuestra parroquia.
+          </p>
         </div>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {["church", "groups", "volunteer_activism", "music_note"].map((icon, i) => (
-            <div key={i} className="aspect-square bg-surface-variant rounded-lg overflow-hidden group shadow-sm">
-              <div className="w-full h-full bg-gradient-to-br from-primary/5 to-surface-container flex items-center justify-center group-hover:scale-105 transition-transform duration-500">
-                <span className="material-symbols-outlined text-primary/20 text-[64px]">{icon}</span>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          {[
+            "church", "groups", "volunteer_activism", "music_note",
+            "celebration", "diversity_3", "local_florist", "auto_stories",
+          ].map((icon, i) => {
+            const tall = i === 0 || i === 5;
+            return (
+              <div
+                key={i}
+                className={`bg-surface-variant rounded-lg overflow-hidden group shadow-sm ${tall ? "row-span-2" : ""}`}
+              >
+                <div className="w-full h-full min-h-[180px] bg-gradient-to-br from-primary/5 to-surface-container flex items-center justify-center group-hover:scale-105 transition-transform duration-500">
+                  <span className="material-symbols-outlined text-primary/15 text-[64px]">{icon}</span>
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
+        <p className="text-center text-sm text-on-surface-variant mt-6 italic">
+          Fotos próximamente — estamos recopilando los mejores momentos de nuestra comunidad.
+        </p>
       </section>
 
-      {/* Proximas Actividades */}
+      {/* Próximas Actividades — from Ordo API */}
       <section className="mb-20">
         <div className="flex flex-col md:flex-row justify-between items-end mb-10 gap-4">
           <div>
@@ -114,32 +199,52 @@ export default function VidaParroquialPage() {
               {t("activitiesTitle")}
             </h2>
             <p className="text-[16px] leading-[24px] text-on-surface-variant mt-2">
-              Únase a nosotros en nuestros próximos eventos parroquiales.
+              Calendario litúrgico y actividades parroquiales.
             </p>
           </div>
-          <button className="text-primary font-semibold text-[14px] tracking-[0.05em] hover:text-altar-gold transition-colors inline-flex items-center gap-1">
+          <Link
+            href="/calendario"
+            className="text-primary font-semibold text-[14px] tracking-[0.05em] hover:text-altar-gold transition-colors inline-flex items-center gap-1"
+          >
             Ver Calendario Completo <span className="material-symbols-outlined text-sm">calendar_month</span>
-          </button>
+          </Link>
         </div>
-        <div className="space-y-4">
-          {[
-            { month: "Oct", day: "15", title: "Picnic Parroquial y Compañerismo", desc: "Una maravillosa tarde de comida, juegos y unión comunitaria en el parque local.", time: "12:00 PM", border: "border-altar-gold" },
-            { month: "Oct", day: "22", title: "Ensayo del Coro de Jóvenes", desc: "Práctica semanal para la próxima misa dominical. ¡Siempre se anima a que se unan nuevas voces!", time: "6:30 PM", border: "border-pew-oak" },
-          ].map((event) => (
-            <div key={event.title} className={`bg-surface-container-lowest rounded-lg p-6 shadow-sm border-l-4 ${event.border} flex flex-col md:flex-row gap-6 items-start md:items-center hover:bg-surface-mist transition-colors`}>
-              <div className="flex-shrink-0 text-center md:w-24">
-                <span className="block font-semibold text-[14px] tracking-[0.05em] text-primary uppercase tracking-wider">{event.month}</span>
-                <span className="block font-headline text-[32px] leading-[40px] font-semibold text-primary">{event.day}</span>
+        <div className="space-y-3">
+          {liturgicalDays.slice(0, 7).map((day) => {
+            const date = new Date(day.fecha + "T12:00:00");
+            const dayNum = date.getDate();
+            const dayNames = ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"];
+            const monthNames = ["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"];
+            const dayName = dayNames[date.getDay()];
+            const monthLabel = monthNames[date.getMonth()];
+            const saint = parseSaint(day.celebracion_santo);
+            const preludio = extractReadingBody(day.preludio);
+            const title = saint || preludio || day.celebracion;
+
+            const today = new Date();
+            const isToday = date.toDateString() === today.toDateString();
+            const borders = ["border-altar-gold", "border-pew-oak", "border-primary", "border-sky-pastel"];
+
+            return (
+              <div
+                key={day.fecha}
+                className={`bg-surface-container-lowest rounded-lg p-5 shadow-sm border-l-4 ${isToday ? "border-primary bg-primary/5" : borders[dayNum % 4]} flex flex-col md:flex-row gap-4 md:gap-6 items-start md:items-center hover:bg-surface-mist transition-colors`}
+              >
+                <div className="flex-shrink-0 text-center md:w-20">
+                  <span className="block text-xs font-bold uppercase tracking-wider text-on-surface-variant">{dayName}</span>
+                  <span className="block font-headline text-[28px] leading-[36px] font-bold text-primary">{dayNum}</span>
+                  <span className="block text-xs text-on-surface-variant">{monthLabel}</span>
+                </div>
+                <div className="flex-grow">
+                  <h4 className="font-headline text-lg font-semibold text-on-surface">{title}</h4>
+                  <p className="text-sm text-on-surface-variant mt-1">{day.celebracion} · {day.colores_dia} · {day.tiempo_liturgico}</p>
+                </div>
+                {isToday && (
+                  <span className="bg-primary text-on-primary px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider flex-shrink-0">Hoy</span>
+                )}
               </div>
-              <div className="flex-grow">
-                <h4 className="font-headline text-[24px] leading-[32px] font-semibold text-on-surface mb-1">{event.title}</h4>
-                <p className="text-[16px] leading-[24px] text-on-surface-variant line-clamp-2">{event.desc}</p>
-              </div>
-              <div className="flex-shrink-0 flex items-center gap-2 text-on-surface-variant font-semibold text-[14px] tracking-[0.05em]">
-                <span className="material-symbols-outlined text-sm">schedule</span> {event.time}
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </section>
     </main>
