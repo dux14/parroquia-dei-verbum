@@ -32,9 +32,9 @@ export default function TopNavBar() {
               <Image
                 src="/logo-dei-verbum.png"
                 alt="Parroquia Dei Verbum"
-                width={120}
-                height={120}
-                className="h-20 md:h-24 w-auto object-contain"
+                width={150}
+                height={150}
+                className="h-24 md:h-28 w-auto object-contain"
                 priority
               />
             </Link>

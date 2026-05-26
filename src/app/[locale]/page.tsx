@@ -30,32 +30,33 @@ export default async function HomePage() {
   return (
     <main className="flex-1">
       {/* Hero Section */}
-      <section className="relative w-full min-h-[60vh] flex items-center justify-center overflow-hidden">
+      <section className="relative w-full min-h-[75vh] md:min-h-[85vh] flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 z-0">
           <Image
             src="/images/hero-home.jpg"
             alt="Parroquia Dei Verbum"
             fill
-            className="object-cover"
+            className="object-cover object-center"
             sizes="100vw"
             priority
-            quality={75}
+            quality={80}
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-primary/60 via-primary/40 to-surface" />
+          <div className="absolute inset-0 bg-black/50" />
+          <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-surface to-transparent" />
         </div>
         <div className="relative z-10 max-w-[1200px] mx-auto px-4 md:px-6 flex flex-col items-center text-center">
           <Image
             src="/logo-dei-verbum.png"
             alt="Dei Verbum Logo"
-            width={192}
-            height={192}
-            className="h-32 md:h-48 w-auto mb-8 drop-shadow-lg brightness-0 invert"
+            width={300}
+            height={300}
+            className="h-40 md:h-64 w-auto mb-8 [filter:invert(1)_drop-shadow(0_0_25px_rgba(0,0,0,0.8))_drop-shadow(0_0_50px_rgba(0,0,0,0.5))_drop-shadow(0_0_80px_rgba(0,0,0,0.3))]"
             priority
           />
-          <h1 className="font-headline text-[48px] leading-[56px] font-bold text-white mb-6 max-w-3xl drop-shadow-md">
+          <h1 className="font-headline text-[36px] leading-[44px] md:text-[56px] md:leading-[64px] font-bold text-white mb-6 max-w-3xl drop-shadow-lg">
             {t("heroTitle")}
           </h1>
-          <p className="font-body text-[18px] leading-[28px] text-white/90 mb-10 max-w-2xl drop-shadow-sm">
+          <p className="font-body text-[18px] leading-[28px] md:text-[20px] md:leading-[30px] text-white/95 mb-10 max-w-2xl drop-shadow-md">
             {t("heroDescription")}
           </p>
         </div>
