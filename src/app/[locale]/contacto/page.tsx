@@ -1,7 +1,7 @@
 import { useTranslations } from "next-intl";
 
 const teamMembers = [
-  { name: "P. Juan Pérez", role: "Párroco", desc: "Sirviendo a nuestra comunidad con amor y dedicación desde 2015.", icon: "person" },
+  { name: "P. Héctor Arbeláez Arenas", role: "Párroco", desc: "Sirviendo a nuestra comunidad con amor y dedicación.", icon: "person" },
   { name: "María García", role: "Presidenta del Consejo", desc: "Coordinando los esfuerzos pastorales y comunitarios.", icon: "person" },
   { name: "Carlos López", role: "Liturgia", desc: "Asegurando que nuestras celebraciones sean hermosas y reverentes.", icon: "person" },
   { name: "Ana Martínez", role: "Educación Religiosa", desc: "Guiando la formación en la fe de nuestros niños y jóvenes.", icon: "person" },
@@ -64,6 +64,10 @@ export default function ContactoPage() {
                 <a className="flex items-center gap-3 text-primary hover:text-altar-gold transition-colors" href="tel:6139763">
                   <span className="material-symbols-outlined">call</span>
                   613 97 63
+                </a>
+                <a className="flex items-center gap-3 text-primary hover:text-altar-gold transition-colors" href="mailto:pdeiverbum@arquibogota.org.co">
+                  <span className="material-symbols-outlined">mail</span>
+                  pdeiverbum@arquibogota.org.co
                 </a>
               </div>
             </div>
