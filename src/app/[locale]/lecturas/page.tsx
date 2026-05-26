@@ -4,6 +4,7 @@ import {
   extractReadingRef,
   extractReadingBody,
 } from "@/lib/ordo";
+import HomilySection from "@/components/sections/HomilySection";
 
 export default async function LecturasPage() {
   const t = await getTranslations("Readings");
@@ -113,47 +114,8 @@ export default async function LecturasPage() {
           )}
         </section>
 
-        {/* Homilías y Reflexiones — en construcción */}
-        <section className="mb-20">
-          <div className="text-center mb-10">
-            <h2 className="font-headline text-[32px] leading-[40px] font-semibold text-primary mb-2">
-              {t("homiliesTitle")}
-            </h2>
-            <p className="text-[16px] leading-[24px] text-on-surface-variant">
-              Escucha o lee las homilías de nuestras misas diarias.
-            </p>
-          </div>
-          <div className="bg-surface-mist rounded-2xl p-8 md:p-12 border border-outline-variant/20 text-center">
-            <span className="material-symbols-outlined text-primary/20 text-[80px] mb-4 block">construction</span>
-            <h3 className="font-headline text-[24px] leading-[32px] font-semibold text-primary mb-3">
-              En Construcción
-            </h3>
-            <p className="text-[16px] leading-[24px] text-on-surface-variant max-w-xl mx-auto mb-6">
-              Estamos trabajando en integrar las homilías de nuestras misas diarias transmitidas en vivo.
-              Pronto podrás escuchar y leer las reflexiones del Padre Héctor directamente aquí.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <a
-                href="https://www.youtube.com/@ParroquiaDeiVerbum"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 bg-primary text-on-primary px-6 py-3 rounded-full text-[14px] tracking-[0.05em] font-semibold hover:bg-primary-container hover:text-on-primary-container transition-colors"
-              >
-                <span className="material-symbols-outlined text-[18px]">play_arrow</span>
-                Ver Misas en YouTube
-              </a>
-              <a
-                href="https://www.facebook.com/parroquiadeiverbumbogota/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 border border-outline-variant text-on-surface-variant px-6 py-3 rounded-full text-[14px] tracking-[0.05em] font-semibold hover:border-primary hover:text-primary transition-colors"
-              >
-                <span className="material-symbols-outlined text-[18px]">live_tv</span>
-                Ver en Facebook Live
-              </a>
-            </div>
-          </div>
-        </section>
+        {/* Homilías */}
+        <HomilySection title={t("homiliesTitle")} />
 
         {/* Recursos Espirituales */}
         <section className="max-w-4xl mx-auto border-t border-outline-variant/30 pt-12">
