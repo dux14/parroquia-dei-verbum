@@ -8,7 +8,11 @@ export const metadata: Metadata = {
   },
   description:
     "Parroquia Dei Verbum — Arquidiócesis de Bogotá. Comunidad de fe, servicio y amor. Calle 106 A No. 59-26, Bogotá.",
-  metadataBase: new URL("https://parroquia-dei-verbum.vercel.app"),
+  metadataBase: new URL("https://dei-verbum-web.vercel.app"),
+  icons: {
+    icon: "/favicon.ico",
+    apple: "/apple-touch-icon.png",
+  },
   openGraph: {
     title: "Parroquia Dei Verbum",
     description:
