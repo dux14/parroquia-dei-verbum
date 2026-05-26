@@ -30,7 +30,7 @@ export default async function HomePage() {
   return (
     <main className="flex-1">
       {/* Hero Section */}
-      <section className="relative w-full min-h-[80vh] flex items-center justify-center overflow-hidden">
+      <section className="relative w-full min-h-[60vh] flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 z-0">
           <div className="w-full h-full bg-primary/5" />
           <div className="absolute inset-0 bg-gradient-to-b from-surface/30 via-surface/10 to-surface" />
@@ -54,8 +54,8 @@ export default async function HomePage() {
       </section>
 
       {/* Horarios y Despacho */}
-      <section className="py-20 px-4 md:px-6 max-w-[1200px] mx-auto">
-        <div className="text-center mb-12">
+      <section className="py-12 px-4 md:px-6 max-w-[1200px] mx-auto">
+        <div className="text-center mb-8">
           <h2 className="font-headline text-[32px] leading-[40px] font-semibold text-primary mb-4">
             {t("scheduleSectionTitle")}
           </h2>
@@ -110,7 +110,7 @@ export default async function HomePage() {
       </section>
 
       {/* Arquitectura de la Fe */}
-      <section className="py-20 px-4 md:px-6 max-w-[1200px] mx-auto">
+      <section className="py-12 px-4 md:px-6 max-w-[1200px] mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
           <div className="md:col-span-5 relative">
             <div className="rounded-2xl overflow-hidden soft-shadow relative z-10 bg-surface-container-low aspect-[4/5]">
@@ -129,7 +129,7 @@ export default async function HomePage() {
       </section>
 
       {/* Donations */}
-      <section className="py-20 px-4 md:px-6 max-w-[1200px] mx-auto mb-20" id="donations">
+      <section className="py-12 px-4 md:px-6 max-w-[1200px] mx-auto mb-10" id="donations">
         <div className="bg-surface-container-low rounded-3xl p-8 md:p-12 soft-shadow flex flex-col lg:flex-row gap-10 items-center relative overflow-hidden border border-altar-gold/20">
           <div className="absolute -right-20 -top-20 w-64 h-64 bg-altar-gold/5 rounded-full blur-3xl z-0" />
           <div className="absolute -left-20 -bottom-20 w-64 h-64 bg-primary/5 rounded-full blur-3xl z-0" />
@@ -161,7 +161,7 @@ export default async function HomePage() {
       </section>
 
       {/* Lectio Divina — live from Ordo API */}
-      <section className="py-20 px-4 md:px-6 max-w-[1200px] mx-auto bg-surface-mist rounded-3xl mb-20 relative overflow-hidden">
+      <section className="py-12 px-4 md:px-6 max-w-[1200px] mx-auto bg-surface-mist rounded-3xl mb-20 relative overflow-hidden">
         <div className="absolute inset-0 opacity-5" style={{ backgroundImage: "radial-gradient(#003e6f 1px, transparent 1px)", backgroundSize: "20px 20px" }} />
         <div className="relative z-10 grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-1 flex flex-col justify-center">
@@ -193,8 +193,8 @@ export default async function HomePage() {
       </section>
 
       {/* Actividades Parroquiales — managed via Sanity */}
-      <section className="py-20 px-4 md:px-6 max-w-[1200px] mx-auto mb-20">
-        <div className="text-center mb-12">
+      <section className="py-12 px-4 md:px-6 max-w-[1200px] mx-auto mb-10">
+        <div className="text-center mb-8">
           <h2 className="font-headline text-[32px] leading-[40px] font-semibold text-primary mb-4">{t("parishLifeTitle")}</h2>
           <p className="text-[16px] leading-[24px] text-on-surface-variant max-w-2xl mx-auto">Únete a nuestras actividades y crece en comunidad.</p>
         </div>
@@ -226,8 +226,8 @@ export default async function HomePage() {
       </section>
 
       {/* Calendario Litúrgico — live from Ordo API */}
-      <section className="py-20 px-4 md:px-6 max-w-[1200px] mx-auto mb-20">
-        <div className="text-center mb-12">
+      <section className="py-12 px-4 md:px-6 max-w-[1200px] mx-auto mb-10">
+        <div className="text-center mb-8">
           <h2 className="font-headline text-[32px] leading-[40px] font-semibold text-primary mb-4">{t("eventsTitle")}</h2>
           <p className="text-[16px] leading-[24px] text-on-surface-variant max-w-2xl mx-auto">
             Calendario litúrgico de los próximos días.
@@ -273,8 +273,8 @@ export default async function HomePage() {
       </section>
 
       {/* Social Media Embeds */}
-      <section className="py-20 px-4 md:px-6 max-w-[1200px] mx-auto mb-20">
-        <div className="text-center mb-12">
+      <section className="py-12 px-4 md:px-6 max-w-[1200px] mx-auto mb-10">
+        <div className="text-center mb-8">
           <h2 className="font-headline text-[32px] leading-[40px] font-semibold text-primary mb-4">Síguenos</h2>
           <p className="text-[16px] leading-[24px] text-on-surface-variant max-w-2xl mx-auto">Mantente conectado con nuestra comunidad en redes sociales.</p>
         </div>
@@ -300,7 +300,7 @@ export default async function HomePage() {
               <span className="font-semibold text-on-surface">YouTube</span>
             </div>
             <iframe
-              src="https://www.youtube.com/embed?listType=user_uploads&list=ParroquiaDeiVerbum"
+              src="https://www.youtube.com/@ParroquiaDeiVerbum/videos"
               className="w-full h-[400px] border-0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
