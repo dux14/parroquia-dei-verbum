@@ -64,10 +64,6 @@ export default function Footer() {
                 <span className="material-symbols-outlined text-altar-gold text-xl">call</span>
                 <span>{t("phone1")}</span>
               </div>
-              <div className="flex items-center gap-3 text-surface-mist/80">
-                <span className="material-symbols-outlined text-altar-gold text-xl">call</span>
-                <span>{t("phone2")}</span>
-              </div>
               <a className="flex items-center gap-3 text-surface-mist/80 hover:text-white transition-colors" href="mailto:pdeiverbum@arquibogota.org.co">
                 <span className="material-symbols-outlined text-altar-gold text-xl">mail</span>
                 <span>pdeiverbum@arquibogota.org.co</span>

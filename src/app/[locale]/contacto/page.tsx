@@ -1,24 +1,38 @@
-import { useTranslations } from "next-intl";
+import { getTranslations } from "next-intl/server";
+import { projectId } from "@/sanity/env";
 
-const teamMembers = [
-  { name: "P. Héctor Arbeláez Arenas", role: "Párroco", desc: "Sirviendo a nuestra comunidad con amor y dedicación.", icon: "person" },
-  { name: "María García", role: "Presidenta del Consejo", desc: "Coordinando los esfuerzos pastorales y comunitarios.", icon: "person" },
-  { name: "Carlos López", role: "Liturgia", desc: "Asegurando que nuestras celebraciones sean hermosas y reverentes.", icon: "person" },
-  { name: "Ana Martínez", role: "Educación Religiosa", desc: "Guiando la formación en la fe de nuestros niños y jóvenes.", icon: "person" },
+interface SanityFaq {
+  question: string;
+  answer: string;
+  category: string | null;
+}
+
+async function getFaqs(): Promise<SanityFaq[]> {
+  if (!projectId) return [];
+  try {
+    const { client } = await import("@/sanity/client");
+    return await client.fetch(
+      `*[_type == "faq"] | order(order asc){ question, answer, category }`
+    );
+  } catch {
+    return [];
+  }
+}
+
+const fallbackFaqs = [
+  { question: "¿Cuáles son los requisitos para Bautizos?", answer: "Para programar un bautizo, los padres deben estar registrados en la parroquia. Se requiere una copia del certificado de nacimiento del niño y tanto padres como padrinos deben asistir a una clase pre-bautismal. Los padrinos deben ser católicos practicantes, haber recibido el sacramento de la Confirmación y, si están casados, debe ser por la Iglesia." },
+  { question: "¿Cómo iniciamos el proceso para Matrimonios?", answer: "Las parejas deben contactar a la oficina parroquial al menos seis (6) meses antes de la fecha deseada para la boda. Se requiere una entrevista inicial con el párroco, certificados de bautismo actualizados, y completar un programa de preparación matrimonial aprobado por la diócesis." },
+  { question: "¿Cuándo ofrecen confesiones?", answer: "El Sacramento de la Reconciliación se ofrece todos los sábados de 3:30 PM a 4:30 PM, o con cita previa llamando a la oficina parroquial. Durante temporadas especiales como Adviento y Cuaresma, se anuncian horarios extendidos." },
+  { question: "¿Cómo solicito una intención de Misa?", answer: "Las intenciones de Misa pueden solicitarse en la oficina parroquial durante horas hábiles. Sugerimos hacer su solicitud con al menos un mes de anticipación si desea una fecha específica." },
 ];
 
-const faqs = [
-  { q: "¿Cuáles son los requisitos para Bautizos?", a: "Para programar un bautizo, los padres deben estar registrados en la parroquia. Se requiere una copia del certificado de nacimiento del niño y tanto padres como padrinos deben asistir a una clase pre-bautismal. Los padrinos deben ser católicos practicantes, haber recibido el sacramento de la Confirmación y, si están casados, debe ser por la Iglesia." },
-  { q: "¿Cómo iniciamos el proceso para Matrimonios?", a: "Las parejas deben contactar a la oficina parroquial al menos seis (6) meses antes de la fecha deseada para la boda. Se requiere una entrevista inicial con el párroco, certificados de bautismo actualizados, y completar un programa de preparación matrimonial aprobado por la diócesis." },
-  { q: "¿Cuándo ofrecen confesiones?", a: "El Sacramento de la Reconciliación se ofrece todos los sábados de 3:30 PM a 4:30 PM, o con cita previa llamando a la oficina parroquial. Durante temporadas especiales como Adviento y Cuaresma, se anuncian horarios extendidos." },
-  { q: "¿Cómo solicito una intención de Misa?", a: "Las intenciones de Misa pueden solicitarse en la oficina parroquial durante horas hábiles. Sugerimos hacer su solicitud con al menos un mes de anticipación si desea una fecha específica. Se sugiere una pequeña donación estipendio según las normas diocesanas." },
-];
-
-export default function ContactoPage() {
-  const t = useTranslations("Contact");
+export default async function ContactoPage() {
+  const t = await getTranslations("Contact");
+  const sanityFaqs = await getFaqs();
+  const faqs = sanityFaqs.length > 0 ? sanityFaqs : fallbackFaqs;
 
   return (
-    <main className="flex-grow w-full max-w-[1200px] mx-auto px-4 md:px-6 py-12 md:py-20 flex flex-col gap-20">
+    <main className="flex-grow w-full max-w-[1200px] mx-auto px-4 md:px-6 py-12 md:py-20 flex flex-col gap-16">
       {/* Header */}
       <section className="text-center max-w-3xl mx-auto">
         <h1 className="font-headline text-[48px] leading-[56px] font-bold text-primary mb-6">
@@ -31,25 +45,25 @@ export default function ContactoPage() {
 
       {/* Bento Grid: Office Hours + Contact Form */}
       <section className="grid grid-cols-1 md:grid-cols-12 gap-6">
-        {/* Office Hours */}
+        {/* Despacho Parroquial */}
         <div className="md:col-span-5 flex flex-col gap-6">
           <div className="bg-surface-mist rounded-xl p-8 soft-shadow border-l-2 border-pew-oak h-full flex flex-col justify-center">
             <h2 className="font-headline text-[24px] leading-[32px] font-semibold text-primary mb-6 flex items-center gap-2">
               <span className="material-symbols-outlined text-altar-gold" style={{ fontVariationSettings: "'FILL' 1" }}>schedule</span>
-              {t("officeHoursTitle")}
+              Horario de Despacho Parroquial
             </h2>
             <ul className="space-y-4 text-[16px] leading-[24px] text-on-surface">
               <li className="flex justify-between items-center border-b border-outline-variant/30 pb-2">
                 <span className="font-medium text-on-surface-variant">Lunes - Viernes</span>
-                <span>9:00 AM - 5:00 PM</span>
+                <span>9:00 AM - 12:00 M</span>
               </li>
               <li className="flex justify-between items-center border-b border-outline-variant/30 pb-2">
-                <span className="font-medium text-on-surface-variant">Sábado</span>
-                <span>10:00 AM - 2:00 PM</span>
+                <span className="font-medium text-on-surface-variant">Lunes - Viernes</span>
+                <span>2:00 PM - 5:00 PM</span>
               </li>
               <li className="flex justify-between items-center pb-2">
-                <span className="font-medium text-on-surface-variant">Domingo</span>
-                <span className="text-altar-gold font-bold">Cerrado (Solo Misa)</span>
+                <span className="font-medium text-on-surface-variant">Sábado y Domingo</span>
+                <span className="text-altar-gold font-bold">Cerrado</span>
               </li>
             </ul>
             <div className="mt-8">
@@ -61,10 +75,6 @@ export default function ContactoPage() {
                   <span className="material-symbols-outlined">call</span>
                   310 7533534
                 </a>
-                <a className="flex items-center gap-3 text-primary hover:text-altar-gold transition-colors" href="tel:6139763">
-                  <span className="material-symbols-outlined">call</span>
-                  613 97 63
-                </a>
                 <a className="flex items-center gap-3 text-primary hover:text-altar-gold transition-colors" href="mailto:pdeiverbum@arquibogota.org.co">
                   <span className="material-symbols-outlined">mail</span>
                   pdeiverbum@arquibogota.org.co
@@ -74,7 +84,7 @@ export default function ContactoPage() {
           </div>
         </div>
 
-        {/* Contact Form */}
+        {/* Contact Form — desactivado por ahora */}
         <div className="md:col-span-7">
           <div className="bg-surface-container-lowest rounded-xl p-8 md:p-12 soft-shadow border border-surface-variant">
             <h2 className="font-headline text-[24px] leading-[32px] font-semibold text-primary mb-2">
@@ -87,54 +97,36 @@ export default function ContactoPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label className="sr-only" htmlFor="firstName">{t("nameLabel")}</label>
-                  <input
-                    className="w-full input-underline px-0 py-3 text-[16px] text-on-surface placeholder:text-outline"
-                    id="firstName"
-                    placeholder={t("nameLabel")}
-                    type="text"
-                  />
+                  <input className="w-full input-underline px-0 py-3 text-[16px] text-on-surface placeholder:text-outline" id="firstName" placeholder={t("nameLabel")} type="text" disabled />
                 </div>
                 <div>
                   <label className="sr-only" htmlFor="email">{t("emailLabel")}</label>
-                  <input
-                    className="w-full input-underline px-0 py-3 text-[16px] text-on-surface placeholder:text-outline"
-                    id="email"
-                    placeholder={t("emailLabel")}
-                    type="email"
-                  />
+                  <input className="w-full input-underline px-0 py-3 text-[16px] text-on-surface placeholder:text-outline" id="email" placeholder={t("emailLabel")} type="email" disabled />
                 </div>
               </div>
               <div>
                 <label className="sr-only" htmlFor="subject">{t("subjectLabel")}</label>
-                <select
-                  className="w-full input-underline px-0 py-3 text-[16px] text-on-surface appearance-none bg-transparent"
-                  id="subject"
-                  defaultValue=""
-                >
+                <select className="w-full input-underline px-0 py-3 text-[16px] text-on-surface appearance-none bg-transparent" id="subject" defaultValue="" disabled>
                   <option disabled value="">Seleccione un Asunto</option>
                   <option value="general">Consulta General</option>
                   <option value="prayer">Petición de Oración</option>
-                  <option value="sacraments">Sacramentos (Bautismo, Matrimonio)</option>
+                  <option value="sacraments">Sacramentos</option>
                   <option value="volunteering">Voluntariado</option>
                 </select>
               </div>
               <div>
                 <label className="sr-only" htmlFor="message">{t("messageLabel")}</label>
-                <textarea
-                  className="w-full input-underline px-0 py-3 text-[16px] text-on-surface placeholder:text-outline resize-none"
-                  id="message"
-                  placeholder="¿Cómo podemos ayudarle?"
-                  rows={4}
-                />
+                <textarea className="w-full input-underline px-0 py-3 text-[16px] text-on-surface placeholder:text-outline resize-none" id="message" placeholder="¿Cómo podemos ayudarle?" rows={4} disabled />
               </div>
-              <div className="pt-4 text-right">
-                <button
-                  className="bg-primary text-on-primary px-8 py-3 rounded-full text-[14px] tracking-[0.05em] font-semibold hover:opacity-90 transition-all soft-shadow hover:-translate-y-0.5 inline-flex items-center gap-2"
-                  type="submit"
-                >
-                  {t("sendButton")}
-                  <span className="material-symbols-outlined text-sm">send</span>
-                </button>
+              <div className="pt-4 flex flex-col sm:flex-row items-center gap-4">
+                <span className="text-sm text-altar-gold font-semibold flex items-center gap-1">
+                  <span className="material-symbols-outlined text-[18px]">construction</span>
+                  Formulario próximamente disponible
+                </span>
+                <a href="mailto:pdeiverbum@arquibogota.org.co" className="bg-primary text-on-primary px-8 py-3 rounded-full text-[14px] tracking-[0.05em] font-semibold hover:opacity-90 transition-all soft-shadow inline-flex items-center gap-2">
+                  Escribir por correo
+                  <span className="material-symbols-outlined text-sm">mail</span>
+                </a>
               </div>
             </form>
           </div>
@@ -152,20 +144,25 @@ export default function ContactoPage() {
           </p>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {teamMembers.map((member) => (
-            <div key={member.name} className="bg-surface-container-lowest rounded-xl p-6 soft-shadow text-center flex flex-col items-center">
+          {[
+            { name: "P. Héctor Arbeláez Arenas", role: "Párroco", desc: "Sirviendo a nuestra comunidad con amor y dedicación.", placeholder: false },
+            { name: "Por confirmar", role: "Consejo Pastoral", desc: "Información próximamente.", placeholder: true },
+            { name: "Por confirmar", role: "Liturgia", desc: "Información próximamente.", placeholder: true },
+            { name: "Por confirmar", role: "Educación Religiosa", desc: "Información próximamente.", placeholder: true },
+          ].map((member, i) => (
+            <div key={i} className={`bg-surface-container-lowest rounded-xl p-6 soft-shadow text-center flex flex-col items-center ${member.placeholder ? "opacity-60" : ""}`}>
               <div className="w-24 h-24 rounded-full bg-surface-container flex items-center justify-center mb-4">
-                <span className="material-symbols-outlined text-primary/40 text-[48px]">{member.icon}</span>
+                <span className="material-symbols-outlined text-primary/40 text-[48px]">person</span>
               </div>
               <h3 className="font-headline text-xl font-semibold text-primary mb-1">{member.name}</h3>
               <p className="text-[14px] tracking-[0.05em] text-altar-gold uppercase tracking-wider mb-2 font-semibold">{member.role}</p>
-              <p className="text-[16px] leading-[24px] text-on-surface-variant text-sm">{member.desc}</p>
+              <p className="text-[14px] leading-[22px] text-on-surface-variant">{member.desc}</p>
             </div>
           ))}
         </div>
       </section>
 
-      {/* FAQ */}
+      {/* FAQ — from Sanity or fallback */}
       <section className="flex flex-col gap-8">
         <div className="text-center max-w-2xl mx-auto">
           <h2 className="font-headline text-[32px] leading-[40px] font-semibold text-primary mb-4">
@@ -176,16 +173,16 @@ export default function ContactoPage() {
           </p>
         </div>
         <div className="max-w-3xl mx-auto w-full flex flex-col gap-4">
-          {faqs.map((faq) => (
-            <details key={faq.q} className="group bg-surface-container-lowest rounded-xl soft-shadow border border-surface-variant [&_summary::-webkit-details-marker]:hidden">
+          {faqs.map((faq, i) => (
+            <details key={i} className="group bg-surface-container-lowest rounded-xl soft-shadow border border-surface-variant [&_summary::-webkit-details-marker]:hidden">
               <summary className="flex cursor-pointer items-center justify-between gap-1.5 p-6 text-primary">
-                <h3 className="font-headline text-lg font-semibold">{faq.q}</h3>
+                <h3 className="font-headline text-lg font-semibold">{faq.question}</h3>
                 <span className="shrink-0 rounded-full bg-surface-variant p-1.5 text-primary sm:p-3 group-open:-rotate-180 transition-transform duration-300">
                   <span className="material-symbols-outlined">expand_more</span>
                 </span>
               </summary>
               <div className="px-6 pb-6 text-[16px] leading-[24px] text-on-surface-variant">
-                <p>{faq.a}</p>
+                <p>{faq.answer}</p>
               </div>
             </details>
           ))}
