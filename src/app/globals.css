@@ -1,0 +1,136 @@
+@import "tailwindcss";
+
+@theme inline {
+  /* Colors — Material Design 3 tonal system from DESIGN.md */
+  --color-primary: #003e6f;
+  --color-on-primary: #ffffff;
+  --color-primary-container: #005696;
+  --color-on-primary-container: #a5cbff;
+  --color-inverse-primary: #a1c9ff;
+  --color-primary-fixed: #d2e4ff;
+  --color-primary-fixed-dim: #a1c9ff;
+  --color-on-primary-fixed: #001c37;
+  --color-on-primary-fixed-variant: #004880;
+
+  --color-secondary: #75584d;
+  --color-on-secondary: #ffffff;
+  --color-secondary-container: #fed7ca;
+  --color-on-secondary-container: #795c51;
+  --color-secondary-fixed: #ffdbce;
+  --color-secondary-fixed-dim: #e4beb2;
+  --color-on-secondary-fixed: #2b160f;
+  --color-on-secondary-fixed-variant: #5b4137;
+
+  --color-tertiary: #2e4047;
+  --color-on-tertiary: #ffffff;
+  --color-tertiary-container: #45575e;
+  --color-on-tertiary-container: #b8ccd5;
+  --color-tertiary-fixed: #d2e6ef;
+  --color-tertiary-fixed-dim: #b6cad2;
+  --color-on-tertiary-fixed: #0b1e24;
+  --color-on-tertiary-fixed-variant: #374951;
+
+  --color-error: #ba1a1a;
+  --color-on-error: #ffffff;
+  --color-error-container: #ffdad6;
+  --color-on-error-container: #93000a;
+
+  --color-surface: #f8f9ff;
+  --color-on-surface: #191c20;
+  --color-surface-dim: #d9dae0;
+  --color-surface-bright: #f8f9ff;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-low: #f2f3f9;
+  --color-surface-container: #ededf4;
+  --color-surface-container-high: #e7e8ee;
+  --color-surface-container-highest: #e1e2e8;
+  --color-surface-variant: #e1e2e8;
+  --color-on-surface-variant: #414750;
+  --color-surface-tint: #1961a1;
+  --color-surface-mist: #F8F9FA;
+  --color-inverse-surface: #2e3035;
+  --color-inverse-on-surface: #eff0f6;
+
+  --color-outline: #727781;
+  --color-outline-variant: #c1c7d2;
+  --color-background: #f8f9ff;
+  --color-on-background: #191c20;
+
+  /* Accent colors */
+  --color-altar-gold: #D4AF37;
+  --color-pew-oak: #5D4037;
+  --color-sky-pastel: #B3E5FC;
+
+  /* Font families */
+  --font-headline: "Libre Caslon Text", serif;
+  --font-body: "Plus Jakarta Sans", sans-serif;
+
+  /* Font sizes — matches DESIGN.md type scale */
+  --font-size-headline-xl: 48px;
+  --line-height-headline-xl: 56px;
+  --font-size-headline-lg: 32px;
+  --line-height-headline-lg: 40px;
+  --font-size-headline-lg-mobile: 28px;
+  --line-height-headline-lg-mobile: 36px;
+  --font-size-headline-md: 24px;
+  --line-height-headline-md: 32px;
+  --font-size-body-lg: 18px;
+  --line-height-body-lg: 28px;
+  --font-size-body-md: 16px;
+  --line-height-body-md: 24px;
+  --font-size-label-sm: 14px;
+  --line-height-label-sm: 20px;
+
+  /* Spacing tokens */
+  --spacing-unit: 8px;
+  --spacing-gutter: 24px;
+  --spacing-margin-mobile: 16px;
+  --spacing-section-gap: 80px;
+  --spacing-container-max: 1200px;
+
+  /* Border radius */
+  --radius-sm: 0.25rem;
+  --radius-DEFAULT: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
+  --radius-full: 9999px;
+}
+
+/* Utility classes from reference HTML */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.soft-shadow {
+  box-shadow: 0 10px 30px rgba(0, 86, 150, 0.05);
+}
+
+/* Minimalist input style from contact page */
+.input-underline {
+  border: none;
+  border-bottom: 2px solid #c1c7d2;
+  border-radius: 0;
+  background: transparent;
+  padding: 0.75rem 0;
+  transition: border-color 0.2s ease;
+}
+.input-underline:focus {
+  outline: none;
+  border-bottom-color: #003e6f;
+}
+
+/* Selection highlight */
+::selection {
+  background-color: #B3E5FC;
+  color: #003e6f;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--color-surface);
+  color: var(--color-on-surface);
+}
