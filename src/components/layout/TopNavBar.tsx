@@ -26,15 +26,15 @@ export default function TopNavBar() {
   return (
     <>
       <header className="bg-surface/80 backdrop-blur-md shadow-sm fixed top-0 w-full z-50 border-b border-outline-variant/30">
-        <div className="max-w-[1200px] mx-auto flex justify-between items-center px-6 py-4">
+        <div className="max-w-[1200px] mx-auto flex justify-between items-center px-6 py-2">
           <div className="flex items-center gap-4">
             <Link href="/" className="flex items-center">
               <Image
                 src="/logo-dei-verbum.png"
                 alt="Parroquia Dei Verbum"
-                width={64}
-                height={64}
-                className="h-16 w-auto object-contain"
+                width={120}
+                height={120}
+                className="h-20 md:h-24 w-auto object-contain"
                 priority
               />
             </Link>

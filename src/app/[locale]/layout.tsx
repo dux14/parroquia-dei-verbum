@@ -47,7 +47,7 @@ export default async function LocaleLayout({
       <body className="bg-surface text-on-surface font-body antialiased min-h-screen flex flex-col">
         <NextIntlClientProvider messages={messages}>
           <TopNavBar />
-          <div className="flex-grow pt-[80px]">
+          <div className="flex-grow pt-[104px]">
             {children}
           </div>
           <Footer />

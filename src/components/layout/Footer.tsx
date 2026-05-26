@@ -16,9 +16,9 @@ export default function Footer() {
               <Image
                 src="/logo-dei-verbum.png"
                 alt="Parroquia Dei Verbum Logo"
-                width={80}
-                height={80}
-                className="h-20 w-auto brightness-0 invert shadow-sm"
+                width={112}
+                height={112}
+                className="h-28 w-auto brightness-0 invert shadow-sm"
               />
             </Link>
             <p className="text-base text-surface-mist/80 leading-relaxed">
