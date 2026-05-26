@@ -12,24 +12,23 @@ export default async function LecturasPage() {
   const gospelRef = reading ? extractReadingRef(reading.evangelio) : "Juan 1:1-5";
   const gospelBody = reading
     ? extractReadingBody(reading.evangelio)
-    : 'En el principio era el Verbo, y el Verbo era con Dios, y el Verbo era Dios. Este era en el principio con Dios. Todas las cosas por él fueron hechas, y sin él nada de lo que ha sido hecho, fue hecho. En él estaba la vida, y la vida era la luz de los hombres. La luz en las tinieblas resplandece, y las tinieblas no prevalecieron contra ella.';
+    : "En el principio era el Verbo, y el Verbo era con Dios, y el Verbo era Dios.";
 
   const firstReadingRef = reading ? extractReadingRef(reading.primera_lectura) : "Isaías 52:7-10";
   const firstReadingBody = reading
     ? extractReadingBody(reading.primera_lectura)
-    : "¡Cuán hermosos son sobre los montes los pies del que trae alegres nuevas, del que anuncia la paz, del que trae nuevas del bien, del que publica salvación, del que dice a Sion: ¡Tu Dios reina!...";
+    : "¡Cuán hermosos son sobre los montes los pies del que trae alegres nuevas...";
 
   const psalmRef = reading ? extractReadingRef(reading.salmo) : "Salmo 98";
   const psalmBody = reading
     ? extractReadingBody(reading.salmo)
     : '"Los confines de la tierra han contemplado la victoria de nuestro Dios."';
 
-  const reflectionBody = reading
-    ? extractReadingBody(reading.reflexion)
-    : "El Padre Mateo reflexiona sobre la profunda sencillez del Evangelio de Juan, recordándonos que no importa la oscuridad que enfrentemos, la luz de Cristo permanece inextinguible.";
+  const secondReadingRef = reading?.segunda_lectura ? extractReadingRef(reading.segunda_lectura) : "";
+  const secondReadingBody = reading?.segunda_lectura ? extractReadingBody(reading.segunda_lectura) : "";
+  const hasSecondReading = secondReadingBody.length > 10;
 
   const liturgicalHeader = reading?.encabezado ?? "";
-  const audioUrl = reading?.reflexion_audio ?? "";
 
   return (
     <>
@@ -50,7 +49,7 @@ export default async function LecturasPage() {
         </section>
 
         {/* Featured Gospel */}
-        <section className="mb-20 relative">
+        <section className="mb-12 relative">
           <div className="absolute inset-0 bg-gradient-to-br from-surface-mist to-surface-container-low rounded-xl -z-10" />
           <div className="bg-surface-container-lowest border border-outline-variant/20 rounded-xl p-8 md:p-12 soft-shadow relative overflow-hidden">
             <span className="material-symbols-outlined absolute -top-10 -right-10 text-[200px] text-surface-container/30 rotate-12 pointer-events-none select-none">
@@ -64,108 +63,95 @@ export default async function LecturasPage() {
                 {gospelRef}
               </span>
             </div>
-            <div className="font-headline text-[24px] leading-[32px] md:text-[32px] md:leading-[40px] font-semibold text-primary mb-8 leading-snug whitespace-pre-line">
-              {gospelBody.split("\n\n").slice(0, 2).join("\n\n")}
-            </div>
-            <div className="text-[16px] leading-[24px] text-on-surface-variant max-w-none whitespace-pre-line">
-              {gospelBody.split("\n\n").slice(2).join("\n\n")}
+            <div className="text-[16px] leading-[26px] text-on-surface-variant max-w-none whitespace-pre-line">
+              {gospelBody}
             </div>
           </div>
         </section>
 
-        {/* Bento Grid: First Reading, Psalm, Reflection */}
-        <section className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-20">
+        {/* Readings Grid — expands to fit content */}
+        <section className={`grid grid-cols-1 ${hasSecondReading ? "md:grid-cols-3" : "md:grid-cols-2"} gap-6 mb-20`}>
           {/* Primera Lectura */}
           <div className="bg-surface-container-lowest rounded-xl p-6 soft-shadow border-l-2 border-pew-oak flex flex-col">
             <div className="mb-4">
-              <span className="text-altar-gold text-[14px] tracking-[0.05em] font-semibold uppercase tracking-wider block mb-1">
+              <span className="text-altar-gold text-[14px] tracking-[0.05em] font-semibold uppercase block mb-1">
                 {t("firstReadingLabel")}
               </span>
-              <h3 className="font-headline text-[24px] leading-[32px] font-semibold text-primary">{firstReadingRef}</h3>
+              <h3 className="font-headline text-[20px] leading-[28px] font-semibold text-primary">{firstReadingRef}</h3>
             </div>
-            <p className="text-[16px] leading-[24px] text-on-surface-variant flex-grow whitespace-pre-line line-clamp-[12]">
+            <div className="text-[15px] leading-[24px] text-on-surface-variant whitespace-pre-line">
               {firstReadingBody}
-            </p>
+            </div>
           </div>
 
           {/* Salmo */}
           <div className="bg-surface-container-lowest rounded-xl p-6 soft-shadow border-l-2 border-pew-oak flex flex-col">
             <div className="mb-4">
-              <span className="text-altar-gold text-[14px] tracking-[0.05em] font-semibold uppercase tracking-wider block mb-1">
+              <span className="text-altar-gold text-[14px] tracking-[0.05em] font-semibold uppercase block mb-1">
                 {t("psalmLabel")}
               </span>
-              <h3 className="font-headline text-[24px] leading-[32px] font-semibold text-primary">{psalmRef}</h3>
+              <h3 className="font-headline text-[20px] leading-[28px] font-semibold text-primary">{psalmRef}</h3>
             </div>
-            <p className="text-[16px] leading-[24px] text-on-surface-variant flex-grow italic whitespace-pre-line">
+            <div className="text-[15px] leading-[24px] text-on-surface-variant italic whitespace-pre-line">
               {psalmBody}
-            </p>
+            </div>
           </div>
 
-          {/* Reflexion */}
-          <div className="bg-primary-container text-on-primary-container rounded-xl p-6 soft-shadow flex flex-col">
-            <div className="mb-4 flex justify-between items-start">
-              <div>
-                <span className="text-inverse-primary text-[14px] tracking-[0.05em] font-semibold uppercase tracking-wider block mb-1">
-                  {t("reflectionLabel")}
+          {/* Segunda Lectura — solo domingos/solemnidades */}
+          {hasSecondReading && (
+            <div className="bg-surface-container-lowest rounded-xl p-6 soft-shadow border-l-2 border-pew-oak flex flex-col">
+              <div className="mb-4">
+                <span className="text-altar-gold text-[14px] tracking-[0.05em] font-semibold uppercase block mb-1">
+                  Segunda Lectura
                 </span>
-                <h3 className="font-headline text-[24px] leading-[32px] font-semibold text-surface-container-lowest">
-                  Reflexión del Día
-                </h3>
+                <h3 className="font-headline text-[20px] leading-[28px] font-semibold text-primary">{secondReadingRef}</h3>
               </div>
-              <span className="material-symbols-outlined text-altar-gold text-[32px]">wb_sunny</span>
+              <div className="text-[15px] leading-[24px] text-on-surface-variant whitespace-pre-line">
+                {secondReadingBody}
+              </div>
             </div>
-            <p className="text-[16px] leading-[24px] text-inverse-primary/90 flex-grow whitespace-pre-line line-clamp-[10]">
-              {reflectionBody}
-            </p>
-            {audioUrl && (
-              <a
-                href={audioUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="border border-inverse-primary text-surface-container-lowest text-[14px] tracking-[0.05em] font-semibold rounded-full px-4 py-2 mt-6 hover:bg-inverse-primary hover:text-primary-container transition-colors self-start inline-flex items-center gap-2"
-              >
-                <span className="material-symbols-outlined text-[18px]">play_arrow</span>
-                Escuchar Reflexión
-              </a>
-            )}
-          </div>
+          )}
         </section>
 
-        {/* Repositorio de Homilias */}
+        {/* Homilías y Reflexiones — en construcción */}
         <section className="mb-20">
           <div className="text-center mb-10">
             <h2 className="font-headline text-[32px] leading-[40px] font-semibold text-primary mb-2">
               {t("homiliesTitle")}
             </h2>
             <p className="text-[16px] leading-[24px] text-on-surface-variant">
-              Escucha o lee las homilías de domingos anteriores.
+              Escucha o lee las homilías de nuestras misas diarias.
             </p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {[
-              { date: "12 de Noviembre, 2023", title: "La Parábola de las Diez Vírgenes", desc: "Una profunda reflexión sobre la importancia de estar preparados espiritualmente para el encuentro con el Señor, manteniendo siempre viva la llama de la fe y el amor en nuestros corazones." },
-              { date: "5 de Noviembre, 2023", title: "El Mayor entre Ustedes", desc: "Una llamada de Cristo al servicio humilde y sincero hacia los demás, advirtiendo contra la hipocresía y el deseo de buscar reconocimiento por encima del bienestar del prójimo." },
-              { date: "29 de Octubre, 2023", title: "El Gran Mandamiento", desc: "Explorando el corazón de la ley de Dios: amar al Señor con todo nuestro ser y amar a nuestro prójimo como a nosotros mismos." },
-            ].map((homily) => (
-              <div key={homily.title} className="bg-surface-container-lowest border border-outline-variant/30 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
-                <span className="text-[14px] tracking-[0.05em] font-semibold text-outline mb-2 block">{homily.date}</span>
-                <h4 className="font-headline text-[24px] leading-[32px] font-semibold text-primary mb-3">{homily.title}</h4>
-                <p className="text-[16px] leading-[24px] text-on-surface-variant mb-4 line-clamp-3">{homily.desc}</p>
-                <div className="flex gap-3">
-                  <button className="flex-1 flex items-center justify-center gap-2 bg-primary/10 text-primary hover:bg-primary hover:text-on-primary transition-colors py-2 rounded-lg text-[14px] tracking-[0.05em] font-semibold">
-                    <span className="material-symbols-outlined text-[20px]">play_arrow</span> {t("listen")}
-                  </button>
-                  <button className="flex-1 flex items-center justify-center gap-2 border border-outline-variant text-on-surface-variant hover:border-primary hover:text-primary transition-colors py-2 rounded-lg text-[14px] tracking-[0.05em] font-semibold">
-                    <span className="material-symbols-outlined text-[20px]">description</span> {t("read")}
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div className="text-center mt-8">
-            <button className="text-primary font-semibold text-[14px] tracking-[0.05em] hover:text-altar-gold hover:underline transition-colors">
-              Ver todas las homilías
-            </button>
+          <div className="bg-surface-mist rounded-2xl p-8 md:p-12 border border-outline-variant/20 text-center">
+            <span className="material-symbols-outlined text-primary/20 text-[80px] mb-4 block">construction</span>
+            <h3 className="font-headline text-[24px] leading-[32px] font-semibold text-primary mb-3">
+              En Construcción
+            </h3>
+            <p className="text-[16px] leading-[24px] text-on-surface-variant max-w-xl mx-auto mb-6">
+              Estamos trabajando en integrar las homilías de nuestras misas diarias transmitidas en vivo.
+              Pronto podrás escuchar y leer las reflexiones del Padre Héctor directamente aquí.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <a
+                href="https://www.youtube.com/@ParroquiaDeiVerbum"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 bg-primary text-on-primary px-6 py-3 rounded-full text-[14px] tracking-[0.05em] font-semibold hover:bg-primary-container hover:text-on-primary-container transition-colors"
+              >
+                <span className="material-symbols-outlined text-[18px]">play_arrow</span>
+                Ver Misas en YouTube
+              </a>
+              <a
+                href="https://www.facebook.com/parroquiadeiverbumbogota/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 border border-outline-variant text-on-surface-variant px-6 py-3 rounded-full text-[14px] tracking-[0.05em] font-semibold hover:border-primary hover:text-primary transition-colors"
+              >
+                <span className="material-symbols-outlined text-[18px]">live_tv</span>
+                Ver en Facebook Live
+              </a>
+            </div>
           </div>
         </section>
 
@@ -186,7 +172,7 @@ export default async function LecturasPage() {
               </div>
               <div>
                 <h4 className="text-[16px] leading-[24px] font-semibold text-primary">Ordo Colombiano</h4>
-                <p className="text-[14px] tracking-[0.05em] font-semibold text-on-surface-variant">Conferencia Episcopal de Colombia</p>
+                <p className="text-[14px] text-on-surface-variant">Conferencia Episcopal de Colombia</p>
               </div>
               <span className="material-symbols-outlined ml-auto text-outline group-hover:text-primary transition-colors">open_in_new</span>
             </a>
@@ -196,7 +182,7 @@ export default async function LecturasPage() {
               </div>
               <div>
                 <h4 className="text-[16px] leading-[24px] font-semibold text-primary">Canal YouTube</h4>
-                <p className="text-[14px] tracking-[0.05em] font-semibold text-on-surface-variant">Parroquia Dei Verbum</p>
+                <p className="text-[14px] text-on-surface-variant">Parroquia Dei Verbum</p>
               </div>
               <span className="material-symbols-outlined ml-auto text-outline group-hover:text-primary transition-colors">open_in_new</span>
             </a>
@@ -210,7 +196,7 @@ export default async function LecturasPage() {
         href="#pedidos-oracion"
       >
         <span className="material-symbols-outlined">volunteer_activism</span>
-        <span className="font-semibold text-[14px] tracking-[0.05em] font-bold hidden md:inline-block pr-1">
+        <span className="font-semibold text-[14px] tracking-[0.05em] hidden md:inline-block pr-1">
           {t("prayerRequest")}
         </span>
       </a>
