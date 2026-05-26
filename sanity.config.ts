@@ -8,6 +8,7 @@ export default defineConfig({
   title: "Parroquia Dei Verbum",
   projectId,
   dataset,
+  basePath: "/studio",
   plugins: [structureTool()],
   schema,
 });
