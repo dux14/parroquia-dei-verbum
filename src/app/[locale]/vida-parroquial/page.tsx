@@ -1,4 +1,5 @@
 import { getTranslations } from "next-intl/server";
+import Image from "next/image";
 import { Link } from "@/i18n/navigation";
 import {
   getLiturgicalCalendar,
@@ -11,6 +12,7 @@ const pastoralGroups = [
     name: "Revolución Juvenil",
     icon: "bolt",
     color: "bg-[#FF6B35]",
+    image: "/images/groups/revolucion-juvenil.jpg",
     desc: "Movimiento juvenil parroquial que busca transformar la vida de los jóvenes a través del encuentro con Cristo, la formación en la fe y el servicio a la comunidad.",
     tag: "Jóvenes",
   },
@@ -18,6 +20,7 @@ const pastoralGroups = [
     name: "Emaús",
     icon: "directions_walk",
     color: "bg-[#8B6914]",
+    image: "/images/groups/emaus.jpg",
     desc: "Comunidad de discípulos que caminan juntos en la fe, inspirados en el encuentro de los discípulos con Jesús resucitado en el camino a Emaús.",
     tag: "Comunidad",
   },
@@ -25,6 +28,7 @@ const pastoralGroups = [
     name: "Hakuna",
     icon: "music_note",
     color: "bg-[#1E88E5]",
+    image: "/images/groups/hakuna.png",
     desc: "Grupo de alabanza y adoración que vive la fe con alegría a través de la música, la oración y el testimonio. Inspirado en el movimiento católico nacido en España.",
     tag: "Alabanza",
   },
@@ -32,6 +36,7 @@ const pastoralGroups = [
     name: "Patah",
     icon: "door_open",
     color: "bg-[#7B1FA2]",
+    image: "/images/groups/patah.png",
     desc: "Movimiento de evangelización que abre puertas al encuentro con Dios. Su nombre en hebreo significa 'abrir', invitando a todos a abrirse a la gracia.",
     tag: "Evangelización",
   },
@@ -39,6 +44,7 @@ const pastoralGroups = [
     name: "Legión de María",
     icon: "star",
     color: "bg-[#0D47A1]",
+    image: "/images/groups/legion-de-maria.jpg",
     desc: "Asociación mariana de fieles católicos que, bajo la guía de María, se dedican al servicio de la Iglesia y la evangelización mediante la oración y el apostolado activo.",
     tag: "Mariano",
   },
@@ -46,6 +52,7 @@ const pastoralGroups = [
     name: "Movimiento de Schoenstatt",
     icon: "home",
     color: "bg-[#2E7D32]",
+    image: "/images/groups/schoenstatt.png",
     desc: "Movimiento apostólico mariano que busca la renovación espiritual mediante la alianza de amor con la Virgen María y la formación de cristianos libres y comprometidos.",
     tag: "Mariano",
   },
@@ -66,9 +73,15 @@ export default async function VidaParroquialPage() {
           {t("heroSubtitle")}
         </p>
         <div className="w-full max-w-4xl h-64 md:h-96 rounded-xl overflow-hidden shadow-sm relative group bg-surface-container-low">
-          <div className="w-full h-full bg-gradient-to-br from-primary/10 to-surface-container flex items-center justify-center">
-            <span className="material-symbols-outlined text-primary/20 text-[120px]">diversity_3</span>
-          </div>
+          <Image
+            src="/images/vida-parroquial-hero.jpg"
+            alt="Comunidad parroquial Dei Verbum"
+            fill
+            className="object-cover group-hover:scale-105 transition-transform duration-700"
+            sizes="(max-width: 768px) 100vw, 900px"
+            priority
+            quality={75}
+          />
         </div>
       </section>
 
@@ -89,12 +102,16 @@ export default async function VidaParroquialPage() {
               key={group.name}
               className="bg-surface-container-lowest rounded-xl soft-shadow hover:-translate-y-1 transition-transform duration-300 relative overflow-hidden group/card border border-outline-variant/10"
             >
-              {/* Logo placeholder — replace with actual group logos */}
-              <div className="h-32 bg-gradient-to-br from-surface-mist to-surface-container-low flex items-center justify-center relative">
-                <div className={`w-16 h-16 ${group.color} rounded-2xl flex items-center justify-center shadow-md`}>
-                  <span className="material-symbols-outlined text-white text-[32px]">{group.icon}</span>
-                </div>
-                <span className="absolute top-3 right-3 bg-surface/80 backdrop-blur-sm text-on-surface-variant px-2.5 py-1 rounded-full text-xs font-semibold tracking-wide">
+              <div className="h-40 bg-gradient-to-br from-surface-mist to-surface-container-low flex items-center justify-center relative overflow-hidden">
+                <Image
+                  src={group.image}
+                  alt={group.name}
+                  fill
+                  className="object-contain p-4"
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                  unoptimized
+                />
+                <span className="absolute top-3 right-3 bg-surface/80 backdrop-blur-sm text-on-surface-variant px-2.5 py-1 rounded-full text-xs font-semibold tracking-wide z-10">
                   {group.tag}
                 </span>
               </div>
@@ -116,10 +133,16 @@ export default async function VidaParroquialPage() {
       {/* Directorio de Ministerios */}
       <section className="mb-20">
         <div className="rounded-2xl overflow-hidden soft-shadow relative">
-          {/* Background image area */}
-          <div className="h-48 md:h-64 bg-gradient-to-br from-primary/20 via-primary/10 to-pew-oak/10 flex items-center justify-center relative">
-            <span className="material-symbols-outlined text-white/10 text-[200px] absolute">church</span>
-            <div className="absolute inset-0 bg-gradient-to-b from-transparent to-surface-mist/95" />
+          <div className="h-48 md:h-64 relative overflow-hidden">
+            <Image
+              src="/images/ministerios-bg.jpg"
+              alt="Ministerios parroquiales"
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, 1200px"
+              quality={70}
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-primary/30 to-surface-mist/95" />
           </div>
 
           <div className="bg-surface-mist p-8 md:p-12 -mt-16 relative z-10">
@@ -170,25 +193,32 @@ export default async function VidaParroquialPage() {
         </div>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
           {[
-            "church", "groups", "volunteer_activism", "music_note",
-            "celebration", "diversity_3", "local_florist", "auto_stories",
-          ].map((icon, i) => {
-            const tall = i === 0 || i === 5;
-            return (
-              <div
-                key={i}
-                className={`bg-surface-variant rounded-lg overflow-hidden group shadow-sm ${tall ? "row-span-2" : ""}`}
-              >
-                <div className="w-full h-full min-h-[180px] bg-gradient-to-br from-primary/5 to-surface-container flex items-center justify-center group-hover:scale-105 transition-transform duration-500">
-                  <span className="material-symbols-outlined text-primary/15 text-[64px]">{icon}</span>
-                </div>
+            { src: "/images/gallery-1.jpg", alt: "Comunidad parroquial", tall: true },
+            { src: "/images/banner-parroquia.jpg", alt: "Parroquia Dei Verbum" },
+            { src: "/images/hero-home.jpg", alt: "Interior de la parroquia" },
+            { src: "/images/gallery-2.jpg", alt: "Celebración litúrgica" },
+            { src: "/images/vida-parroquial-hero.jpg", alt: "Vida parroquial" },
+            { src: "/images/gallery-3.jpg", alt: "Comunidad en oración", tall: true },
+            { src: "/images/ministerios-bg.jpg", alt: "Ministerios" },
+            { src: "/images/parroco.jpg", alt: "Padre Héctor" },
+          ].map((photo, i) => (
+            <div
+              key={i}
+              className={`bg-surface-variant rounded-lg overflow-hidden group shadow-sm relative ${photo.tall ? "row-span-2" : ""}`}
+            >
+              <div className="w-full h-full min-h-[180px] relative">
+                <Image
+                  src={photo.src}
+                  alt={photo.alt}
+                  fill
+                  className="object-cover group-hover:scale-105 transition-transform duration-500"
+                  sizes="(max-width: 768px) 50vw, 25vw"
+                  quality={70}
+                />
               </div>
-            );
-          })}
+            </div>
+          ))}
         </div>
-        <p className="text-center text-sm text-on-surface-variant mt-6 italic">
-          Fotos próximamente — estamos recopilando los mejores momentos de nuestra comunidad.
-        </p>
       </section>
 
       {/* Próximas Actividades — from Ordo API */}

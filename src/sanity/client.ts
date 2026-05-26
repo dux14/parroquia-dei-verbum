@@ -6,4 +6,7 @@ export const client = createClient({
   dataset,
   apiVersion,
   useCdn: true,
+  stega: { enabled: false },
 });
+
+export const SANITY_REVALIDATE = 3600;

@@ -32,8 +32,16 @@ export default async function HomePage() {
       {/* Hero Section */}
       <section className="relative w-full min-h-[60vh] flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 z-0">
-          <div className="w-full h-full bg-primary/5" />
-          <div className="absolute inset-0 bg-gradient-to-b from-surface/30 via-surface/10 to-surface" />
+          <Image
+            src="/images/hero-home.jpg"
+            alt="Parroquia Dei Verbum"
+            fill
+            className="object-cover"
+            sizes="100vw"
+            priority
+            quality={75}
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-primary/60 via-primary/40 to-surface" />
         </div>
         <div className="relative z-10 max-w-[1200px] mx-auto px-4 md:px-6 flex flex-col items-center text-center">
           <Image
@@ -41,13 +49,13 @@ export default async function HomePage() {
             alt="Dei Verbum Logo"
             width={192}
             height={192}
-            className="h-32 md:h-48 w-auto mb-8 drop-shadow-md"
+            className="h-32 md:h-48 w-auto mb-8 drop-shadow-lg brightness-0 invert"
             priority
           />
-          <h1 className="font-headline text-[48px] leading-[56px] font-bold text-primary mb-6 max-w-3xl">
+          <h1 className="font-headline text-[48px] leading-[56px] font-bold text-white mb-6 max-w-3xl drop-shadow-md">
             {t("heroTitle")}
           </h1>
-          <p className="font-body text-[18px] leading-[28px] text-on-surface-variant mb-10 max-w-2xl">
+          <p className="font-body text-[18px] leading-[28px] text-white/90 mb-10 max-w-2xl drop-shadow-sm">
             {t("heroDescription")}
           </p>
         </div>
@@ -114,9 +122,14 @@ export default async function HomePage() {
         <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
           <div className="md:col-span-5 relative">
             <div className="rounded-2xl overflow-hidden soft-shadow relative z-10 bg-surface-container-low aspect-[4/5]">
-              <div className="w-full h-full bg-gradient-to-br from-primary/10 to-surface-container flex items-center justify-center">
-                <span className="material-symbols-outlined text-primary/20 text-[120px]">church</span>
-              </div>
+              <Image
+                src="/images/banner-parroquia.jpg"
+                alt="Parroquia Dei Verbum — vista exterior"
+                fill
+                className="object-cover"
+                sizes="(max-width: 768px) 100vw, 40vw"
+                quality={75}
+              />
             </div>
             <div className="absolute -bottom-6 -right-6 w-2/3 h-full border-r-2 border-b-2 border-pew-oak/20 rounded-br-3xl z-0" />
           </div>

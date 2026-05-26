@@ -1,4 +1,5 @@
 import { getTranslations } from "next-intl/server";
+import Image from "next/image";
 import { projectId } from "@/sanity/env";
 
 interface SanityFaq {
@@ -10,9 +11,11 @@ interface SanityFaq {
 async function getFaqs(): Promise<SanityFaq[]> {
   if (!projectId) return [];
   try {
-    const { client } = await import("@/sanity/client");
+    const { client, SANITY_REVALIDATE } = await import("@/sanity/client");
     return await client.fetch(
-      `*[_type == "faq"] | order(order asc){ question, answer, category }`
+      `*[_type == "faq"] | order(order asc){ question, answer, category }`,
+      {},
+      { next: { revalidate: SANITY_REVALIDATE } }
     );
   } catch {
     return [];
@@ -151,8 +154,19 @@ export default async function ContactoPage() {
             { name: "Por confirmar", role: "Educación Religiosa", desc: "Información próximamente.", placeholder: true },
           ].map((member, i) => (
             <div key={i} className={`bg-surface-container-lowest rounded-xl p-6 soft-shadow text-center flex flex-col items-center ${member.placeholder ? "opacity-60" : ""}`}>
-              <div className="w-24 h-24 rounded-full bg-surface-container flex items-center justify-center mb-4">
-                <span className="material-symbols-outlined text-primary/40 text-[48px]">person</span>
+              <div className="w-24 h-24 rounded-full bg-surface-container flex items-center justify-center mb-4 overflow-hidden relative">
+                {i === 0 ? (
+                  <Image
+                    src="/images/parroco.jpg"
+                    alt={member.name}
+                    fill
+                    className="object-cover"
+                    sizes="96px"
+                    quality={75}
+                  />
+                ) : (
+                  <span className="material-symbols-outlined text-primary/40 text-[48px]">person</span>
+                )}
               </div>
               <h3 className="font-headline text-xl font-semibold text-primary mb-1">{member.name}</h3>
               <p className="text-[14px] tracking-[0.05em] text-altar-gold uppercase tracking-wider mb-2 font-semibold">{member.role}</p>

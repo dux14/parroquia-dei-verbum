@@ -11,12 +11,13 @@ export interface SanityHomily {
 export async function getLatestHomilies(limit = 6): Promise<SanityHomily[]> {
   if (!projectId) return [];
   try {
-    const { client } = await import("./client");
+    const { client, SANITY_REVALIDATE } = await import("./client");
     return await client.fetch(
       `*[_type == "homily"] | order(date desc)[0...$limit]{
         youtubeUrl, timestamp, date, scriptureRef, notes
       }`,
-      { limit }
+      { limit },
+      { next: { revalidate: SANITY_REVALIDATE } }
     );
   } catch {
     return [];

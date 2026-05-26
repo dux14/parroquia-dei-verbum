@@ -73,7 +73,7 @@ export interface OrdoLiturgicalDay {
 
 async function fetchOrdoData(): Promise<OrdoDailyReading[] | null> {
   try {
-    const res = await fetch(ORDO_API, { next: { revalidate: 3600 } });
+    const res = await fetch(ORDO_API, { next: { revalidate: 21600 } });
     if (!res.ok) return null;
     const json = await res.json();
     return json.data ?? null;
