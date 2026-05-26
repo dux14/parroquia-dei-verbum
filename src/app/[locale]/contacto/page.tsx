@@ -202,17 +202,27 @@ export default function ContactoPage() {
             Estamos ubicados en el corazón de la comunidad.
           </p>
         </div>
-        <div className="rounded-xl overflow-hidden soft-shadow relative h-[400px] w-full bg-surface-variant flex items-center justify-center">
-          <div className="w-full h-full bg-gradient-to-br from-primary/5 to-surface-container flex items-center justify-center">
-            <span className="material-symbols-outlined text-primary/10 text-[160px]">map</span>
-          </div>
+        <div className="rounded-xl overflow-hidden soft-shadow relative h-[400px] w-full bg-surface-variant">
+          <iframe
+            src="https://maps.google.com/maps?q=Parroquia+Dei+Verbum+Calle+106A+59-26+Bogota+Colombia&t=&z=16&ie=UTF8&iwloc=&output=embed"
+            className="w-full h-full border-0"
+            allowFullScreen
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+            title={t("mapAlt")}
+          />
           <div className="absolute bottom-6 left-6 md:bottom-8 md:left-8 bg-surface/95 backdrop-blur-sm p-6 rounded-lg soft-shadow max-w-sm border border-outline-variant/20 z-10">
             <h3 className="font-headline text-[24px] leading-[32px] font-semibold text-primary mb-2">Parroquia Dei Verbum</h3>
             <p className="text-[16px] leading-[24px] text-on-surface-variant mb-4">
               Calle 106 A No. 59-26<br />
               Bogotá, Colombia
             </p>
-            <a className="inline-flex items-center gap-2 text-altar-gold hover:text-primary transition-colors text-[14px] tracking-[0.05em] font-bold" href="#">
+            <a
+              className="inline-flex items-center gap-2 text-altar-gold hover:text-primary transition-colors text-[14px] tracking-[0.05em] font-bold"
+              href="https://www.google.com/maps/search/Parroquia+Dei+Verbum+Calle+106A+59-26+Bogota"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               Obtener Direcciones
               <span className="material-symbols-outlined">directions</span>
             </a>

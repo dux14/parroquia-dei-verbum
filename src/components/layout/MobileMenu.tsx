@@ -86,15 +86,20 @@ export default function MobileMenu({
 
         <div className="px-6 mt-8 flex flex-col gap-4">
           <div className="flex items-center gap-3 text-sm font-semibold">
-            <span className={locale === "es" ? "text-primary font-bold" : "text-on-surface-variant"}>
+            <Link
+              href={pathname}
+              locale="es"
+              onClick={onClose}
+              className={locale === "es" ? "text-primary font-bold" : "text-on-surface-variant hover:text-primary transition-colors"}
+            >
               ES
-            </span>
+            </Link>
             <span className="text-outline-variant">|</span>
             <Link
               href={pathname}
-              locale={otherLocale}
+              locale="en"
               onClick={onClose}
-              className={locale === "en" ? "text-primary font-bold" : "text-on-surface-variant"}
+              className={locale === "en" ? "text-primary font-bold" : "text-on-surface-variant hover:text-primary transition-colors"}
             >
               EN
             </Link>

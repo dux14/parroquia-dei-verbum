@@ -65,13 +65,17 @@ export default function TopNavBar() {
 
           <div className="hidden md:flex items-center gap-4">
             <div className="text-sm tracking-[0.05em] font-semibold flex items-center gap-2">
-              <span className={locale === "es" ? "text-primary font-bold" : "text-on-surface-variant"}>
+              <Link
+                href={pathname}
+                locale="es"
+                className={locale === "es" ? "text-primary font-bold" : "text-on-surface-variant hover:text-primary transition-colors"}
+              >
                 ES
-              </span>
+              </Link>
               <span className="text-outline-variant">|</span>
               <Link
                 href={pathname}
-                locale={otherLocale}
+                locale="en"
                 className={locale === "en" ? "text-primary font-bold" : "text-on-surface-variant hover:text-primary transition-colors"}
               >
                 EN

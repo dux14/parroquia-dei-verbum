@@ -1,7 +1,35 @@
-import { useTranslations } from "next-intl";
+import { getTranslations } from "next-intl/server";
+import {
+  getTodayReading,
+  extractReadingRef,
+  extractReadingBody,
+} from "@/lib/ordo";
 
-export default function LecturasPage() {
-  const t = useTranslations("Readings");
+export default async function LecturasPage() {
+  const t = await getTranslations("Readings");
+  const reading = await getTodayReading();
+
+  const gospelRef = reading ? extractReadingRef(reading.evangelio) : "Juan 1:1-5";
+  const gospelBody = reading
+    ? extractReadingBody(reading.evangelio)
+    : 'En el principio era el Verbo, y el Verbo era con Dios, y el Verbo era Dios. Este era en el principio con Dios. Todas las cosas por él fueron hechas, y sin él nada de lo que ha sido hecho, fue hecho. En él estaba la vida, y la vida era la luz de los hombres. La luz en las tinieblas resplandece, y las tinieblas no prevalecieron contra ella.';
+
+  const firstReadingRef = reading ? extractReadingRef(reading.primera_lectura) : "Isaías 52:7-10";
+  const firstReadingBody = reading
+    ? extractReadingBody(reading.primera_lectura)
+    : "¡Cuán hermosos son sobre los montes los pies del que trae alegres nuevas, del que anuncia la paz, del que trae nuevas del bien, del que publica salvación, del que dice a Sion: ¡Tu Dios reina!...";
+
+  const psalmRef = reading ? extractReadingRef(reading.salmo) : "Salmo 98";
+  const psalmBody = reading
+    ? extractReadingBody(reading.salmo)
+    : '"Los confines de la tierra han contemplado la victoria de nuestro Dios."';
+
+  const reflectionBody = reading
+    ? extractReadingBody(reading.reflexion)
+    : "El Padre Mateo reflexiona sobre la profunda sencillez del Evangelio de Juan, recordándonos que no importa la oscuridad que enfrentemos, la luz de Cristo permanece inextinguible.";
+
+  const liturgicalHeader = reading?.encabezado ?? "";
+  const audioUrl = reading?.reflexion_audio ?? "";
 
   return (
     <>
@@ -14,6 +42,11 @@ export default function LecturasPage() {
           <p className="font-body text-[18px] leading-[28px] text-on-surface-variant">
             {t("heroSubtitle")}
           </p>
+          {liturgicalHeader && (
+            <p className="mt-4 text-[14px] tracking-[0.05em] font-semibold text-altar-gold">
+              {liturgicalHeader}
+            </p>
+          )}
         </section>
 
         {/* Featured Gospel */}
@@ -28,16 +61,14 @@ export default function LecturasPage() {
                 {t("gospelLabel")}
               </span>
               <span className="text-on-surface-variant text-[14px] tracking-[0.05em] font-semibold uppercase tracking-wider">
-                Juan 1:1-5
+                {gospelRef}
               </span>
             </div>
-            <h2 className="font-headline text-[32px] leading-[40px] md:text-[48px] md:leading-[56px] font-semibold text-primary mb-8 leading-snug">
-              &ldquo;En el principio era el Verbo, y el Verbo era con Dios, y el Verbo era Dios.&rdquo;
-            </h2>
-            <div className="text-[16px] leading-[24px] text-on-surface-variant max-w-none">
-              <p className="mb-4">
-                Este era en el principio con Dios. Todas las cosas por él fueron hechas, y sin él nada de lo que ha sido hecho, fue hecho. En él estaba la vida, y la vida era la luz de los hombres. La luz en las tinieblas resplandece, y las tinieblas no prevalecieron contra ella.
-              </p>
+            <div className="font-headline text-[24px] leading-[32px] md:text-[32px] md:leading-[40px] font-semibold text-primary mb-8 leading-snug whitespace-pre-line">
+              {gospelBody.split("\n\n").slice(0, 2).join("\n\n")}
+            </div>
+            <div className="text-[16px] leading-[24px] text-on-surface-variant max-w-none whitespace-pre-line">
+              {gospelBody.split("\n\n").slice(2).join("\n\n")}
             </div>
           </div>
         </section>
@@ -50,14 +81,11 @@ export default function LecturasPage() {
               <span className="text-altar-gold text-[14px] tracking-[0.05em] font-semibold uppercase tracking-wider block mb-1">
                 {t("firstReadingLabel")}
               </span>
-              <h3 className="font-headline text-[24px] leading-[32px] font-semibold text-primary">Isaías 52:7-10</h3>
+              <h3 className="font-headline text-[24px] leading-[32px] font-semibold text-primary">{firstReadingRef}</h3>
             </div>
-            <p className="text-[16px] leading-[24px] text-on-surface-variant flex-grow">
-              ¡Cuán hermosos son sobre los montes los pies del que trae alegres nuevas, del que anuncia la paz, del que trae nuevas del bien, del que publica salvación, del que dice a Sion: ¡Tu Dios reina!...
+            <p className="text-[16px] leading-[24px] text-on-surface-variant flex-grow whitespace-pre-line line-clamp-[12]">
+              {firstReadingBody}
             </p>
-            <button className="text-primary text-[14px] tracking-[0.05em] font-semibold flex items-center gap-1 mt-4 hover:text-altar-gold transition-colors self-start">
-              Leer Completo <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
-            </button>
           </div>
 
           {/* Salmo */}
@@ -66,14 +94,11 @@ export default function LecturasPage() {
               <span className="text-altar-gold text-[14px] tracking-[0.05em] font-semibold uppercase tracking-wider block mb-1">
                 {t("psalmLabel")}
               </span>
-              <h3 className="font-headline text-[24px] leading-[32px] font-semibold text-primary">Salmo 98</h3>
+              <h3 className="font-headline text-[24px] leading-[32px] font-semibold text-primary">{psalmRef}</h3>
             </div>
-            <p className="text-[16px] leading-[24px] text-on-surface-variant flex-grow italic">
-              &ldquo;Los confines de la tierra han contemplado la victoria de nuestro Dios.&rdquo;
+            <p className="text-[16px] leading-[24px] text-on-surface-variant flex-grow italic whitespace-pre-line">
+              {psalmBody}
             </p>
-            <button className="text-primary text-[14px] tracking-[0.05em] font-semibold flex items-center gap-1 mt-4 hover:text-altar-gold transition-colors self-start">
-              Leer Completo <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
-            </button>
           </div>
 
           {/* Reflexion */}
@@ -84,17 +109,25 @@ export default function LecturasPage() {
                   {t("reflectionLabel")}
                 </span>
                 <h3 className="font-headline text-[24px] leading-[32px] font-semibold text-surface-container-lowest">
-                  Luz en las Tinieblas
+                  Reflexión del Día
                 </h3>
               </div>
               <span className="material-symbols-outlined text-altar-gold text-[32px]">wb_sunny</span>
             </div>
-            <p className="text-[16px] leading-[24px] text-inverse-primary/90 flex-grow">
-              El Padre Mateo reflexiona sobre la profunda sencillez del Evangelio de Juan, recordándonos que no importa la oscuridad que enfrentemos, la luz de Cristo permanece inextinguible.
+            <p className="text-[16px] leading-[24px] text-inverse-primary/90 flex-grow whitespace-pre-line line-clamp-[10]">
+              {reflectionBody}
             </p>
-            <button className="border border-inverse-primary text-surface-container-lowest text-[14px] tracking-[0.05em] font-semibold rounded-full px-4 py-2 mt-6 hover:bg-inverse-primary hover:text-primary-container transition-colors self-start">
-              Escuchar Homilía
-            </button>
+            {audioUrl && (
+              <a
+                href={audioUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="border border-inverse-primary text-surface-container-lowest text-[14px] tracking-[0.05em] font-semibold rounded-full px-4 py-2 mt-6 hover:bg-inverse-primary hover:text-primary-container transition-colors self-start inline-flex items-center gap-2"
+              >
+                <span className="material-symbols-outlined text-[18px]">play_arrow</span>
+                Escuchar Reflexión
+              </a>
+            )}
           </div>
         </section>
 
@@ -147,21 +180,26 @@ export default function LecturasPage() {
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {[
-              { icon: "menu_book", title: "Lecturas Diarias de la USCCB", desc: "Texto oficial para los Estados Unidos." },
-              { icon: "headphones", title: "Biblia en Audio", desc: "Escucha las escrituras." },
-            ].map((resource) => (
-              <a key={resource.title} className="flex items-center p-4 rounded-lg bg-surface-mist hover:bg-surface-container-low border border-transparent hover:border-outline-variant/20 transition-all group" href="#">
-                <div className="w-12 h-12 rounded-full bg-primary/10 text-primary flex items-center justify-center mr-4 group-hover:bg-primary group-hover:text-on-primary transition-colors">
-                  <span className="material-symbols-outlined">{resource.icon}</span>
-                </div>
-                <div>
-                  <h4 className="text-[16px] leading-[24px] font-semibold text-primary">{resource.title}</h4>
-                  <p className="text-[14px] tracking-[0.05em] font-semibold text-on-surface-variant">{resource.desc}</p>
-                </div>
-                <span className="material-symbols-outlined ml-auto text-outline group-hover:text-primary transition-colors">open_in_new</span>
-              </a>
-            ))}
+            <a className="flex items-center p-4 rounded-lg bg-surface-mist hover:bg-surface-container-low border border-transparent hover:border-outline-variant/20 transition-all group" href="https://web-ordo-colombiano.cec.org.co/lectura-dia" target="_blank" rel="noopener noreferrer">
+              <div className="w-12 h-12 rounded-full bg-primary/10 text-primary flex items-center justify-center mr-4 group-hover:bg-primary group-hover:text-on-primary transition-colors">
+                <span className="material-symbols-outlined">menu_book</span>
+              </div>
+              <div>
+                <h4 className="text-[16px] leading-[24px] font-semibold text-primary">Ordo Colombiano</h4>
+                <p className="text-[14px] tracking-[0.05em] font-semibold text-on-surface-variant">Conferencia Episcopal de Colombia</p>
+              </div>
+              <span className="material-symbols-outlined ml-auto text-outline group-hover:text-primary transition-colors">open_in_new</span>
+            </a>
+            <a className="flex items-center p-4 rounded-lg bg-surface-mist hover:bg-surface-container-low border border-transparent hover:border-outline-variant/20 transition-all group" href="https://www.youtube.com/@ParroquiaDeiVerbum" target="_blank" rel="noopener noreferrer">
+              <div className="w-12 h-12 rounded-full bg-primary/10 text-primary flex items-center justify-center mr-4 group-hover:bg-primary group-hover:text-on-primary transition-colors">
+                <span className="material-symbols-outlined">headphones</span>
+              </div>
+              <div>
+                <h4 className="text-[16px] leading-[24px] font-semibold text-primary">Canal YouTube</h4>
+                <p className="text-[14px] tracking-[0.05em] font-semibold text-on-surface-variant">Parroquia Dei Verbum</p>
+              </div>
+              <span className="material-symbols-outlined ml-auto text-outline group-hover:text-primary transition-colors">open_in_new</span>
+            </a>
           </div>
         </section>
       </main>
