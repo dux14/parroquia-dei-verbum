@@ -3,6 +3,8 @@ import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
+import TopNavBar from "@/components/layout/TopNavBar";
+import Footer from "@/components/layout/Footer";
 
 const libreCaslon = Libre_Caslon_Text({
   subsets: ["latin"],
@@ -44,7 +46,11 @@ export default async function LocaleLayout({
       </head>
       <body className="bg-surface text-on-surface font-body antialiased min-h-screen flex flex-col">
         <NextIntlClientProvider messages={messages}>
-          {children}
+          <TopNavBar />
+          <div className="flex-grow pt-[80px]">
+            {children}
+          </div>
+          <Footer />
         </NextIntlClientProvider>
       </body>
     </html>
