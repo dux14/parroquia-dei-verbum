@@ -11,7 +11,6 @@ export interface ReadingSectionData {
 }
 
 interface ReadingsViewProps {
-  gospelLabel: string;
   gospel: ReadingSectionData;
   first: ReadingSectionData;
   psalm: ReadingSectionData;
@@ -27,25 +26,25 @@ function renderBlocks(blocks: ReadingBlock[]) {
       case "citation":
         if (block.isTitleDuplicate) return null;
         return (
-          <h4 key={i} className="font-headline text-primary font-semibold mt-2 mb-1">
+          <h4 key={`${block.kind}-${i}`} className="font-headline text-primary font-semibold mt-2 mb-1">
             {block.text}
           </h4>
         );
       case "comment":
         return (
-          <p key={i} className="italic text-outline mb-3 whitespace-pre-line">
+          <p key={`${block.kind}-${i}`} className="italic text-outline mb-3 whitespace-pre-line">
             {block.text}
           </p>
         );
       case "intro":
         return (
-          <p key={i} className="text-secondary font-semibold mb-3">
+          <p key={`${block.kind}-${i}`} className="text-secondary font-semibold mb-3">
             {block.text}
           </p>
         );
       case "closing":
         return (
-          <p key={i} className="mt-3">
+          <p key={`${block.kind}-${i}`} className="mt-3">
             <span className="bg-sky-pastel/50 text-primary font-semibold rounded px-2 py-0.5">
               {block.text}
             </span>
@@ -54,7 +53,7 @@ function renderBlocks(blocks: ReadingBlock[]) {
       case "alternate":
         return (
           <div
-            key={i}
+            key={`${block.kind}-${i}`}
             className="border-t border-outline-variant/40 mt-5 pt-3 mb-3 text-outline text-[0.85em] uppercase tracking-[0.08em]"
           >
             O bien
@@ -62,7 +61,7 @@ function renderBlocks(blocks: ReadingBlock[]) {
         );
       case "psalmResponse":
         return (
-          <p key={i} className="text-primary mb-2 whitespace-pre-line">
+          <p key={`${block.kind}-${i}`} className="text-primary mb-2 whitespace-pre-line">
             <span className="font-bold text-on-primary bg-primary rounded px-1.5 py-0.5 mr-1 text-[0.8em] align-middle">
               {block.marker}
             </span>
@@ -71,7 +70,7 @@ function renderBlocks(blocks: ReadingBlock[]) {
         );
       case "psalmVerse":
         return (
-          <p key={i} className="text-on-surface-variant mb-2 whitespace-pre-line">
+          <p key={`${block.kind}-${i}`} className="text-on-surface-variant mb-2 whitespace-pre-line">
             <span className="font-bold text-secondary mr-1">{block.marker}</span>
             {block.text}
             {block.repeatCue && <span className="font-bold text-primary ml-1">R.</span>}
@@ -80,7 +79,7 @@ function renderBlocks(blocks: ReadingBlock[]) {
       case "body":
       default:
         return (
-          <p key={i} className="text-on-surface-variant mb-3 whitespace-pre-line">
+          <p key={`${block.kind}-${i}`} className="text-on-surface-variant mb-3 whitespace-pre-line">
             {block.text}
           </p>
         );
@@ -104,7 +103,7 @@ function ReadingCard({ data, style }: { data: ReadingSectionData; style: CSSProp
   );
 }
 
-export default function ReadingsView({ gospelLabel, gospel, first, psalm, second }: ReadingsViewProps) {
+export default function ReadingsView({ gospel, first, psalm, second }: ReadingsViewProps) {
   const [tier, setTier] = useState(0);
 
   useEffect(() => {
@@ -134,7 +133,7 @@ export default function ReadingsView({ gospelLabel, gospel, first, psalm, second
             onClick={() => changeTier(lvl)}
             aria-label={`Tamaño de letra ${lvl + 1}`}
             aria-pressed={tier === lvl}
-            className={`rounded-md border px-2 py-1 leading-none transition-colors ${
+            className={`rounded-md border px-2 py-1 leading-none transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
               tier === lvl
                 ? "border-primary bg-primary text-on-primary"
                 : "border-outline-variant text-on-surface-variant hover:border-primary"
@@ -150,12 +149,12 @@ export default function ReadingsView({ gospelLabel, gospel, first, psalm, second
       <section className="mb-12 relative">
         <div className="absolute inset-0 bg-gradient-to-br from-surface-mist to-surface-container-low rounded-xl -z-10" />
         <div className="bg-surface-container-lowest border border-outline-variant/20 rounded-xl p-8 md:p-12 soft-shadow relative overflow-hidden">
-          <span className="material-symbols-outlined absolute -top-10 -right-10 text-[200px] text-surface-container/30 rotate-12 pointer-events-none select-none">
+          <span aria-hidden="true" className="material-symbols-outlined absolute -top-10 -right-10 text-[200px] text-surface-container/30 rotate-12 pointer-events-none select-none">
             swords
           </span>
           <div className="flex items-center gap-3 mb-6">
             <span className="bg-sky-pastel text-on-primary-fixed text-[14px] tracking-[0.05em] font-semibold px-3 py-1 rounded-full">
-              {gospelLabel}
+              {gospel.label}
             </span>
             <span className="text-on-surface-variant text-[14px] tracking-[0.05em] font-semibold uppercase">
               {gospel.title}
