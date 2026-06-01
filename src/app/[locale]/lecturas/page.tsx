@@ -49,8 +49,7 @@ export default async function LecturasPage() {
   const liturgicalHeader = reading?.encabezado ?? "";
 
   return (
-    <>
-      <main className="max-w-[1200px] mx-auto px-4 md:px-6 pb-20">
+    <main className="max-w-[1200px] mx-auto px-4 md:px-6 pb-20">
         {/* Hero */}
         <section className="mt-12 mb-16 text-center max-w-3xl mx-auto">
           <h1 className="font-headline text-[48px] leading-[56px] font-bold text-primary mb-4">
@@ -105,17 +104,5 @@ export default async function LecturasPage() {
           </div>
         </section>
       </main>
-
-      {/* Floating Prayer Request FAB */}
-      <a
-        className="fixed bottom-6 right-6 md:bottom-8 md:right-8 bg-altar-gold text-pew-oak shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all rounded-full px-5 py-4 flex items-center gap-2 z-40 group"
-        href="#pedidos-oracion"
-      >
-        <span className="material-symbols-outlined">volunteer_activism</span>
-        <span className="font-semibold text-[14px] tracking-[0.05em] hidden md:inline-block pr-1">
-          {t("prayerRequest")}
-        </span>
-      </a>
-    </>
   );
 }

@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import TopNavBar from "@/components/layout/TopNavBar";
 import Footer from "@/components/layout/Footer";
+import PrayerRequestFab from "@/components/ui/PrayerRequestFab";
 
 const libreCaslon = Libre_Caslon_Text({
   subsets: ["latin"],
@@ -51,6 +52,7 @@ export default async function LocaleLayout({
             {children}
           </div>
           <Footer />
+          <PrayerRequestFab />
         </NextIntlClientProvider>
       </body>
     </html>

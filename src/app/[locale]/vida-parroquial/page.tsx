@@ -102,7 +102,7 @@ export default async function VidaParroquialPage() {
               key={group.name}
               className="bg-surface-container-lowest rounded-xl soft-shadow hover:-translate-y-1 transition-transform duration-300 relative overflow-hidden group/card border border-outline-variant/10"
             >
-              <div className="h-40 bg-gradient-to-br from-surface-mist to-surface-container-low flex items-center justify-center relative overflow-hidden">
+              <div className="h-40 bg-white flex items-center justify-center relative overflow-hidden">
                 <Image
                   src={group.image}
                   alt={group.name}

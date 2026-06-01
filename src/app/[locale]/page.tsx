@@ -2,6 +2,7 @@ import { getTranslations } from "next-intl/server";
 import Image from "next/image";
 import { Link } from "@/i18n/navigation";
 import ShareButton from "@/components/ui/ShareButton";
+import LiveMassEmbed from "@/components/sections/LiveMassEmbed";
 import {
   getTodayReading,
   extractReadingRef,
@@ -16,7 +17,7 @@ export default async function HomePage() {
   const reading = await getTodayReading();
   const liturgicalDays = await getLiturgicalCalendar();
 
-  const gospelRef = reading ? extractReadingRef(reading.evangelio) : "Jn 14, 6";
+  const gospelRef = reading ? extractReadingRef(reading.evangelio) : "Jn 14,6";
   const gospelQuote = reading
     ? extractGospelQuote(reading.evangelio)
     : "Yo soy el camino, la verdad y la vida. Nadie va al Padre sino por mí.";
@@ -61,6 +62,8 @@ export default async function HomePage() {
           </p>
         </div>
       </section>
+
+      <LiveMassEmbed />
 
       {/* Horarios y Despacho */}
       <section className="py-12 px-4 md:px-6 max-w-[1200px] mx-auto">
@@ -190,11 +193,18 @@ export default async function HomePage() {
                 {saintOfDay || saintPreludio}
               </p>
             )}
+            <Link
+              href="/lecturas"
+              className="mt-6 inline-flex items-center gap-2 text-primary font-semibold text-[14px] tracking-[0.05em] hover:text-primary-container transition-colors w-max border-b border-primary pb-1"
+            >
+              Ver las lecturas de hoy
+              <span className="material-symbols-outlined text-sm">arrow_forward</span>
+            </Link>
           </div>
           <div className="lg:col-span-2">
             <div className="glass-panel p-8 rounded-2xl">
               <span className="text-[14px] tracking-[0.05em] font-semibold text-secondary block mb-4">{gospelSource}</span>
-              <blockquote className="font-headline text-[20px] leading-[28px] md:text-[24px] md:leading-[32px] font-semibold text-primary-container italic mb-6">
+              <blockquote className="font-body text-[20px] leading-[28px] md:text-[24px] md:leading-[32px] font-semibold text-primary-container mb-6">
                 &ldquo;{gospelQuote.length > 300 ? gospelQuote.slice(0, 300) + "..." : gospelQuote}&rdquo;
               </blockquote>
               <div className="border-t border-outline-variant/30 pt-4 flex justify-between items-center">
@@ -314,7 +324,7 @@ export default async function HomePage() {
               <span className="font-semibold text-on-surface">YouTube</span>
             </div>
             <iframe
-              src="https://www.youtube.com/@ParroquiaDeiVerbum/videos"
+              src="https://www.youtube.com/embed/videoseries?list=UUxENqnnNPigauO91jVmEcXA"
               className="w-full h-[400px] border-0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen

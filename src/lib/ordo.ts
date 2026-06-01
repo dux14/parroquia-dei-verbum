@@ -103,7 +103,8 @@ export function parseSaint(raw: string): string {
 
 export function extractReadingRef(html: string): string {
   const match = html.match(/<strong>([^<]+)<\/strong>/);
-  return match ? match[1].trim() : "";
+  // Formato católico: sin espacio tras la coma (ej. "Jn 14, 6" -> "Jn 14,6").
+  return match ? match[1].trim().replace(/,\s+/g, ",") : "";
 }
 
 export function extractReadingBody(html: string): string {
