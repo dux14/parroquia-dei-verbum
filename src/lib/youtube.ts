@@ -34,6 +34,22 @@ export async function fetchVideoTitle(url: string): Promise<string | null> {
   }
 }
 
+// Último video subido al canal, vía el feed RSS público (sin API key).
+export async function getLatestVideoId(): Promise<string | null> {
+  try {
+    const res = await fetch(
+      "https://www.youtube.com/feeds/videos.xml?channel_id=UCxENqnnNPigauO91jVmEcXA",
+      { next: { revalidate: 3600 } }
+    );
+    if (!res.ok) return null;
+    const xml = await res.text();
+    const match = xml.match(/<yt:videoId>([^<]+)<\/yt:videoId>/);
+    return match ? match[1] : null;
+  } catch {
+    return null;
+  }
+}
+
 export function formatTimestamp(seconds: number): string {
   const h = Math.floor(seconds / 3600);
   const m = Math.floor((seconds % 3600) / 60);

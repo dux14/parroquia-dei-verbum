@@ -81,7 +81,7 @@ export default async function LecturasPage() {
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <a className="flex items-center p-4 rounded-lg bg-surface-mist hover:bg-surface-container-low border border-transparent hover:border-outline-variant/20 transition-all group" href="https://web-ordo-colombiano.cec.org.co/lectura-dia" target="_blank" rel="noopener noreferrer">
+            <a className="flex items-center p-4 rounded-lg bg-surface-mist hover:bg-surface-container-low border border-transparent hover:border-outline-variant/20 transition-all group" href="https://web-ordo-colombiano.cec.org.co/inicio" target="_blank" rel="noopener noreferrer">
               <div className="w-12 h-12 rounded-full bg-primary/10 text-primary flex items-center justify-center mr-4 group-hover:bg-primary group-hover:text-on-primary transition-colors">
                 <span className="material-symbols-outlined">menu_book</span>
               </div>

@@ -98,22 +98,10 @@ export default async function CalendarioPage() {
           Retiros, formación, encuentros comunitarios y otras actividades organizadas por la parroquia.
         </p>
         <div className="space-y-4">
-          {[
-            { title: "Encuentro Juvenil", desc: "Espacio de reflexión, alabanza y convivencia para jóvenes de 15 a 25 años.", schedule: "Sábados, 16:00 hrs", border: "border-pew-oak" },
-            { title: "Estudio Bíblico", desc: "Profundiza en las Sagradas Escrituras con nuestro grupo de estudio semanal.", schedule: "Jueves, 19:30 hrs", border: "border-altar-gold" },
-            { title: "Coro Parroquial", desc: "Acompaña nuestras celebraciones eucarísticas a través del canto y la música.", schedule: "Martes, 18:00 hrs", border: "border-sky-pastel" },
-          ].map((event) => (
-            <div key={event.title} className={`bg-surface-container-lowest rounded-lg p-6 shadow-sm border-l-4 ${event.border} flex flex-col md:flex-row gap-4 items-start md:items-center hover:bg-surface-mist transition-colors`}>
-              <div className="flex-grow">
-                <h4 className="font-headline text-lg font-semibold text-on-surface mb-1">{event.title}</h4>
-                <p className="text-sm text-on-surface-variant">{event.desc}</p>
-              </div>
-              <div className="flex-shrink-0 flex items-center gap-2 text-on-surface-variant text-sm font-semibold">
-                <span className="material-symbols-outlined text-sm">schedule</span>
-                {event.schedule}
-              </div>
-            </div>
-          ))}
+          <div className="bg-surface-container-lowest rounded-lg p-10 shadow-sm border border-dashed border-outline-variant/40 flex flex-col items-center justify-center text-center">
+            <span className="material-symbols-outlined text-outline text-[32px] mb-3">schedule</span>
+            <p className="text-[14px] font-semibold text-on-surface-variant tracking-[0.05em] uppercase">Próximamente</p>
+          </div>
         </div>
         <p className="text-sm text-on-surface-variant mt-6 italic">
           Estas actividades son administradas por la parroquia. Para más información o inscripciones, contacta la oficina parroquial.

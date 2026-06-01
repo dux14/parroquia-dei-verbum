@@ -3,6 +3,7 @@ import Image from "next/image";
 import { Link } from "@/i18n/navigation";
 import ShareButton from "@/components/ui/ShareButton";
 import LiveMassEmbed from "@/components/sections/LiveMassEmbed";
+import { getLatestVideoId } from "@/lib/youtube";
 import {
   getTodayReading,
   extractReadingRef,
@@ -16,6 +17,7 @@ export default async function HomePage() {
   const t = await getTranslations("Home");
   const reading = await getTodayReading();
   const liturgicalDays = await getLiturgicalCalendar();
+  const latestVideoId = await getLatestVideoId();
 
   const gospelRef = reading ? extractReadingRef(reading.evangelio) : "Jn 14,6";
   const gospelQuote = reading
@@ -223,22 +225,10 @@ export default async function HomePage() {
           <p className="text-[16px] leading-[24px] text-on-surface-variant max-w-2xl mx-auto">Únete a nuestras actividades y crece en comunidad.</p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {[
-            { label: "Jóvenes", icon: "groups", title: "Encuentro Juvenil", desc: "Espacio de reflexión, alabanza y convivencia para jóvenes de 15 a 25 años.", time: "Sábados, 16:00 hrs", border: "border-pew-oak" },
-            { label: "Formación", icon: "menu_book", title: "Estudio Bíblico", desc: "Profundiza en las Sagradas Escrituras con nuestro grupo de estudio semanal.", time: "Jueves, 19:30 hrs", border: "border-altar-gold" },
-            { label: "Liturgia", icon: "music_note", title: "Coro Parroquial", desc: "Acompaña nuestras celebraciones eucarísticas a través del canto y la música.", time: "Martes, 18:00 hrs", border: "border-sky-pastel" },
-          ].map((activity) => (
-            <div key={activity.title} className={`bg-surface-container-lowest rounded-xl p-6 soft-shadow border-l-4 ${activity.border} hover:-translate-y-1 transition-transform duration-300`}>
-              <div className="flex justify-between items-start mb-4">
-                <span className="bg-surface-container-low text-primary px-3 py-1 rounded-full text-xs font-semibold tracking-wide">{activity.label}</span>
-                <span className="material-symbols-outlined text-outline">{activity.icon}</span>
-              </div>
-              <h4 className="font-headline text-lg font-semibold text-primary mb-2">{activity.title}</h4>
-              <p className="text-[14px] leading-[24px] text-on-surface-variant mb-4">{activity.desc}</p>
-              <div className="flex items-center gap-2 text-on-surface-variant text-sm">
-                <span className="material-symbols-outlined text-base">event</span>
-                {activity.time}
-              </div>
+          {[0, 1, 2].map((i) => (
+            <div key={i} className="bg-surface-container-lowest rounded-xl p-8 soft-shadow border border-dashed border-outline-variant/40 flex flex-col items-center justify-center text-center min-h-[180px]">
+              <span className="material-symbols-outlined text-outline text-[32px] mb-3">schedule</span>
+              <p className="text-[14px] font-semibold text-on-surface-variant tracking-[0.05em] uppercase">Próximamente</p>
             </div>
           ))}
         </div>
@@ -324,7 +314,11 @@ export default async function HomePage() {
               <span className="font-semibold text-on-surface">YouTube</span>
             </div>
             <iframe
-              src="https://www.youtube.com/embed/videoseries?list=UUxENqnnNPigauO91jVmEcXA"
+              src={
+                latestVideoId
+                  ? `https://www.youtube.com/embed/${latestVideoId}`
+                  : "https://www.youtube.com/embed/videoseries?list=UUxENqnnNPigauO91jVmEcXA"
+              }
               className="w-full h-[400px] border-0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
