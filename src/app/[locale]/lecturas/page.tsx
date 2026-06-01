@@ -1,33 +1,50 @@
 import { getTranslations } from "next-intl/server";
-import {
-  getTodayReading,
-  extractReadingRef,
-  extractReadingBody,
-} from "@/lib/ordo";
+import { getTodayReading, extractReadingRef, extractReadingBody } from "@/lib/ordo";
+import { parseReading, readingTitle } from "@/lib/reading-parser";
+import ReadingsView, { type ReadingSectionData } from "@/components/readings/ReadingsView";
 import HomilySection from "@/components/sections/HomilySection";
+
+function buildSection(
+  label: string,
+  html: string | null | undefined,
+  fallbackTitle: string,
+  fallbackBody: string,
+): ReadingSectionData {
+  if (!html) {
+    return { label, title: fallbackTitle, blocks: [{ kind: "body", text: fallbackBody }] };
+  }
+  const blocks = parseReading(html);
+  const title = readingTitle(blocks) || extractReadingRef(html);
+  return { label, title, blocks };
+}
 
 export default async function LecturasPage() {
   const t = await getTranslations("Readings");
   const reading = await getTodayReading();
 
-  const gospelRef = reading ? extractReadingRef(reading.evangelio) : "Juan 1:1-5";
-  const gospelBody = reading
-    ? extractReadingBody(reading.evangelio)
-    : "En el principio era el Verbo, y el Verbo era con Dios, y el Verbo era Dios.";
-
-  const firstReadingRef = reading ? extractReadingRef(reading.primera_lectura) : "Isaías 52:7-10";
-  const firstReadingBody = reading
-    ? extractReadingBody(reading.primera_lectura)
-    : "¡Cuán hermosos son sobre los montes los pies del que trae alegres nuevas...";
-
-  const psalmRef = reading ? extractReadingRef(reading.salmo) : "Salmo 98";
-  const psalmBody = reading
-    ? extractReadingBody(reading.salmo)
-    : '"Los confines de la tierra han contemplado la victoria de nuestro Dios."';
-
-  const secondReadingRef = reading?.segunda_lectura ? extractReadingRef(reading.segunda_lectura) : "";
-  const secondReadingBody = reading?.segunda_lectura ? extractReadingBody(reading.segunda_lectura) : "";
-  const hasSecondReading = secondReadingBody.length > 10;
+  const gospel = buildSection(
+    t("gospelLabel"),
+    reading?.evangelio,
+    "Juan 1:1-5",
+    "En el principio era el Verbo, y el Verbo era con Dios, y el Verbo era Dios.",
+  );
+  const first = buildSection(
+    t("firstReadingLabel"),
+    reading?.primera_lectura,
+    "Isaías 52:7-10",
+    "¡Cuán hermosos son sobre los montes los pies del que trae alegres nuevas...",
+  );
+  const psalm = buildSection(
+    t("psalmLabel"),
+    reading?.salmo,
+    "Salmo 98",
+    '"Los confines de la tierra han contemplado la victoria de nuestro Dios."',
+  );
+  const secondHtml = reading?.segunda_lectura ?? "";
+  const second =
+    secondHtml && extractReadingBody(secondHtml).length > 10
+      ? buildSection("Segunda Lectura", secondHtml, "", "")
+      : null;
 
   const liturgicalHeader = reading?.encabezado ?? "";
 
@@ -49,70 +66,7 @@ export default async function LecturasPage() {
           )}
         </section>
 
-        {/* Featured Gospel */}
-        <section className="mb-12 relative">
-          <div className="absolute inset-0 bg-gradient-to-br from-surface-mist to-surface-container-low rounded-xl -z-10" />
-          <div className="bg-surface-container-lowest border border-outline-variant/20 rounded-xl p-8 md:p-12 soft-shadow relative overflow-hidden">
-            <span className="material-symbols-outlined absolute -top-10 -right-10 text-[200px] text-surface-container/30 rotate-12 pointer-events-none select-none">
-              swords
-            </span>
-            <div className="flex items-center gap-3 mb-6">
-              <span className="bg-sky-pastel text-on-primary-fixed text-[14px] tracking-[0.05em] font-semibold px-3 py-1 rounded-full">
-                {t("gospelLabel")}
-              </span>
-              <span className="text-on-surface-variant text-[14px] tracking-[0.05em] font-semibold uppercase tracking-wider">
-                {gospelRef}
-              </span>
-            </div>
-            <div className="text-[16px] leading-[26px] text-on-surface-variant max-w-none whitespace-pre-line">
-              {gospelBody}
-            </div>
-          </div>
-        </section>
-
-        {/* Readings Grid — expands to fit content */}
-        <section className={`grid grid-cols-1 ${hasSecondReading ? "md:grid-cols-3" : "md:grid-cols-2"} gap-6 mb-20`}>
-          {/* Primera Lectura */}
-          <div className="bg-surface-container-lowest rounded-xl p-6 soft-shadow border-l-2 border-pew-oak flex flex-col">
-            <div className="mb-4">
-              <span className="text-altar-gold text-[14px] tracking-[0.05em] font-semibold uppercase block mb-1">
-                {t("firstReadingLabel")}
-              </span>
-              <h3 className="font-headline text-[20px] leading-[28px] font-semibold text-primary">{firstReadingRef}</h3>
-            </div>
-            <div className="text-[15px] leading-[24px] text-on-surface-variant whitespace-pre-line">
-              {firstReadingBody}
-            </div>
-          </div>
-
-          {/* Salmo */}
-          <div className="bg-surface-container-lowest rounded-xl p-6 soft-shadow border-l-2 border-pew-oak flex flex-col">
-            <div className="mb-4">
-              <span className="text-altar-gold text-[14px] tracking-[0.05em] font-semibold uppercase block mb-1">
-                {t("psalmLabel")}
-              </span>
-              <h3 className="font-headline text-[20px] leading-[28px] font-semibold text-primary">{psalmRef}</h3>
-            </div>
-            <div className="text-[15px] leading-[24px] text-on-surface-variant italic whitespace-pre-line">
-              {psalmBody}
-            </div>
-          </div>
-
-          {/* Segunda Lectura — solo domingos/solemnidades */}
-          {hasSecondReading && (
-            <div className="bg-surface-container-lowest rounded-xl p-6 soft-shadow border-l-2 border-pew-oak flex flex-col">
-              <div className="mb-4">
-                <span className="text-altar-gold text-[14px] tracking-[0.05em] font-semibold uppercase block mb-1">
-                  Segunda Lectura
-                </span>
-                <h3 className="font-headline text-[20px] leading-[28px] font-semibold text-primary">{secondReadingRef}</h3>
-              </div>
-              <div className="text-[15px] leading-[24px] text-on-surface-variant whitespace-pre-line">
-                {secondReadingBody}
-              </div>
-            </div>
-          )}
-        </section>
+        <ReadingsView gospel={gospel} first={first} psalm={psalm} second={second} />
 
         {/* Homilías */}
         <HomilySection title={t("homiliesTitle")} />

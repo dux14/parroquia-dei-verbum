@@ -40,7 +40,9 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-claude.md   
+claude.md
 docs/
 .superpowers
-agents.md   
+agents.md
+CLAUDE.md
+.claude/
