@@ -1,8 +1,9 @@
 // src/components/readings/ReadingsView.tsx
 "use client";
 
-import { useEffect, useState, type CSSProperties } from "react";
+import { type CSSProperties } from "react";
 import type { ReadingBlock } from "@/lib/reading-parser";
+import FontSizeControl, { useFontScale } from "@/components/ui/FontSizeControl";
 
 export interface ReadingSectionData {
   label: string;
@@ -16,9 +17,6 @@ interface ReadingsViewProps {
   psalm: ReadingSectionData;
   second: ReadingSectionData | null;
 }
-
-const SCALE = [1, 1.15, 1.3] as const;
-const STORAGE_KEY = "dv-reading-size";
 
 function renderBlocks(blocks: ReadingBlock[]) {
   return blocks.map((block, i) => {
@@ -104,45 +102,16 @@ function ReadingCard({ data, style }: { data: ReadingSectionData; style: CSSProp
 }
 
 export default function ReadingsView({ gospel, first, psalm, second }: ReadingsViewProps) {
-  const [tier, setTier] = useState(0);
+  const { tier, changeTier, factor } = useFontScale("dv-reading-size");
 
-  useEffect(() => {
-    const saved = Number(localStorage.getItem(STORAGE_KEY));
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    if (saved === 0 || saved === 1 || saved === 2) setTier(saved);
-  }, []);
-
-  function changeTier(next: number) {
-    setTier(next);
-    localStorage.setItem(STORAGE_KEY, String(next));
-  }
-
-  const factor = SCALE[tier];
   const gospelStyle: CSSProperties = { fontSize: `${16 * factor}px`, lineHeight: 1.65 };
   const gridStyle: CSSProperties = { fontSize: `${15 * factor}px`, lineHeight: 1.6 };
 
   return (
     <>
       {/* Font-size control — only scales reading text */}
-      <div className="flex items-center justify-end gap-2 mb-4">
-        <span className="text-[13px] text-on-surface-variant mr-1">Tamaño</span>
-        {[0, 1, 2].map((lvl) => (
-          <button
-            key={lvl}
-            type="button"
-            onClick={() => changeTier(lvl)}
-            aria-label={`Tamaño de letra ${lvl + 1}`}
-            aria-pressed={tier === lvl}
-            className={`rounded-md border px-2 py-1 leading-none transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
-              tier === lvl
-                ? "border-primary bg-primary text-on-primary"
-                : "border-outline-variant text-on-surface-variant hover:border-primary"
-            }`}
-            style={{ fontSize: `${12 + lvl * 3}px` }}
-          >
-            A
-          </button>
-        ))}
+      <div className="mb-4">
+        <FontSizeControl tier={tier} onChange={changeTier} />
       </div>
 
       {/* Featured Gospel */}

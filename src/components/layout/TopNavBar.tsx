@@ -11,6 +11,7 @@ const navLinks = [
   { href: "/", labelKey: "inicio" },
   { href: "/vida-parroquial", labelKey: "vidaParroquial" },
   { href: "/lecturas", labelKey: "lecturas" },
+  { href: "/oraciones", labelKey: "oraciones" },
   { href: "/sacramentos", labelKey: "sacramentos" },
   { href: "/contacto", labelKey: "contacto" },
 ] as const;

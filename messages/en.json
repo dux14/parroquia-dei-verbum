@@ -3,6 +3,7 @@
     "inicio": "Home",
     "vidaParroquial": "Parish Life",
     "lecturas": "Readings",
+    "oraciones": "Prayers",
     "sacramentos": "Sacraments",
     "contacto": "Contact",
     "donaciones": "Donate",
@@ -76,6 +77,13 @@
     "read": "Read",
     "resourcesTitle": "Spiritual Resources",
     "prayerRequest": "Prayer Request"
+  },
+  "Prayers": {
+    "heroTitle": "Prayers",
+    "heroSubtitle": "A treasury of prayers for your life of faith",
+    "searchPlaceholder": "Search a prayer...",
+    "sizeLabel": "Size",
+    "noResults": "No prayers found for “{query}”."
   },
   "Sacraments": {
     "heroTitle": "Sacraments",

@@ -3,6 +3,7 @@
     "inicio": "Inicio",
     "vidaParroquial": "Vida Parroquial",
     "lecturas": "Lecturas",
+    "oraciones": "Oraciones",
     "sacramentos": "Sacramentos",
     "contacto": "Contacto",
     "donaciones": "Donaciones",
@@ -76,6 +77,13 @@
     "read": "Leer",
     "resourcesTitle": "Recursos Espirituales",
     "prayerRequest": "Intención de Oración"
+  },
+  "Prayers": {
+    "heroTitle": "Oraciones",
+    "heroSubtitle": "Un tesoro de oraciones para tu vida de fe",
+    "searchPlaceholder": "Buscar oración...",
+    "sizeLabel": "Tamaño",
+    "noResults": "No se encontraron oraciones para «{query}»."
   },
   "Sacraments": {
     "heroTitle": "Sacramentos",
