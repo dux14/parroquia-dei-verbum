@@ -18,7 +18,9 @@ const ENTITIES: Record<string, string> = {
 };
 
 function decodeEntities(s: string): string {
-  return s.replace(/&[a-zA-Z]+;|&#\d+;/g, (m) => ENTITIES[m] ?? m);
+  return s.replace(/&[a-zA-Z]+;|&#\d+;/g, (m) =>
+    ENTITIES[m] ?? (m.startsWith("&#") ? String.fromCharCode(parseInt(m.slice(2), 10)) : m),
+  );
 }
 
 // Strip tags, turn single <br> into newline, collapse intra-line whitespace.
@@ -67,6 +69,9 @@ export function parseReading(html: string | null | undefined): ReadingBlock[] {
       continue;
     }
     if (/^<strong>[^<]*<\/strong>$/i.test(raw)) {
+      // The FIRST citation is the one rendered as the blue title, so flag it as a
+      // duplicate (the UI skips it in the body to avoid showing the citation twice).
+      // Later citations (e.g. an "o bien" alternate) are kept and shown as subtitles.
       const isTitleDuplicate = !seenCitation;
       seenCitation = true;
       blocks.push({ kind: "citation", text, isTitleDuplicate });
