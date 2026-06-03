@@ -48,7 +48,7 @@ export default function LiveMassEmbed() {
       </div>
       <div className="relative w-full overflow-hidden rounded-2xl soft-shadow aspect-video">
         <iframe
-          src="https://www.youtube.com/embed/live_stream?channel=UCxENqnnNPigauO91jVmEcXA"
+          src="https://www.youtube.com/embed/BDTFiat4pqM"
           title="Misa en vivo"
           className="absolute inset-0 w-full h-full border-0"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
