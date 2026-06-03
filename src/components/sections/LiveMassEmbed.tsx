@@ -1,40 +1,63 @@
 "use client";
 
-import { useSyncExternalStore } from "react";
+import { useEffect, useState } from "react";
+import { buildEmbedUrl } from "@/lib/youtube";
+import type { LiveStreamStatus } from "@/lib/youtube-live";
 
-// Misa en vivo: Lunes a Sábado 18:00–19:30, Domingo 12:00–13:30 (90 min),
-// evaluado siempre en hora de Bogotá, no en la hora local del navegador.
-function isWithinMassWindow(): boolean {
-  const parts = new Intl.DateTimeFormat("en-US", {
-    timeZone: "America/Bogota",
-    weekday: "short",
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: false,
-  }).formatToParts(new Date());
-
-  const weekday = parts.find((p) => p.type === "weekday")?.value ?? "";
-  const hour = Number(parts.find((p) => p.type === "hour")?.value ?? "0");
-  const minute = Number(parts.find((p) => p.type === "minute")?.value ?? "0");
-  const minutes = hour * 60 + minute;
-
-  if (weekday === "Sun") {
-    return minutes >= 12 * 60 && minutes < 13 * 60 + 30;
-  }
-  return minutes >= 18 * 60 && minutes < 19 * 60 + 30;
-}
-
-function subscribe(callback: () => void) {
-  const id = setInterval(callback, 60_000);
-  return () => clearInterval(id);
-}
+// El temporizador no excede 15 min: pestañas dormidas / ventanas lejanas se
+// re-arman por tramos sin pedir red hasta que toca el nextCheck del servidor.
+const MAX_TIMER_MS = 15 * 60 * 1000;
 
 export default function LiveMassEmbed() {
-  // Server snapshot siempre false; en cliente se evalúa la ventana y se
-  // re-evalúa cada minuto para ocultarse solo al terminar la misa.
-  const live = useSyncExternalStore(subscribe, isWithinMassWindow, () => false);
+  const [status, setStatus] = useState<LiveStreamStatus | null>(null);
 
-  if (!live) return null;
+  useEffect(() => {
+    let cancelled = false;
+    let timer: ReturnType<typeof setTimeout> | null = null;
+    let nextCheckMs = 0;
+
+    function arm() {
+      const delay = Math.min(
+        Math.max(nextCheckMs - Date.now(), 0),
+        MAX_TIMER_MS
+      );
+      timer = setTimeout(onWake, delay);
+    }
+
+    async function load() {
+      try {
+        const res = await fetch("/api/live-status");
+        if (!res.ok) throw new Error(String(res.status));
+        const data: LiveStreamStatus = await res.json();
+        if (cancelled) return;
+        setStatus(data);
+        nextCheckMs = new Date(data.nextCheck).getTime();
+      } catch {
+        // Red caída: reintentar en el próximo ciclo máximo.
+        nextCheckMs = Date.now() + MAX_TIMER_MS;
+      }
+      if (!cancelled) arm();
+    }
+
+    function onWake() {
+      if (cancelled) return;
+      // El servidor manda el horario: si aún no toca, re-armar sin pedir red.
+      if (Date.now() < nextCheckMs) {
+        arm();
+        return;
+      }
+      load();
+    }
+
+    load();
+
+    return () => {
+      cancelled = true;
+      if (timer) clearTimeout(timer);
+    };
+  }, []);
+
+  if (!status?.isLive || !status.videoId) return null;
 
   return (
     <section className="py-12 px-4 md:px-6 max-w-[1200px] mx-auto">
@@ -48,7 +71,7 @@ export default function LiveMassEmbed() {
       </div>
       <div className="relative w-full overflow-hidden rounded-2xl soft-shadow aspect-video">
         <iframe
-          src="https://www.youtube.com/embed/BDTFiat4pqM"
+          src={buildEmbedUrl(status.videoId)}
           title="Misa en vivo"
           className="absolute inset-0 w-full h-full border-0"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
