@@ -87,7 +87,15 @@
     "helpClothes": "Clothing in good condition",
     "helpMoney": "Monetary gifts",
     "helpContact": "Coordinate your donation with the parish office:",
-    "externalCta": "Read the full story on the Archdiocese website"
+    "externalCta": "Read the full story on the Archdiocese website",
+    "historyTitle": "A mission with history",
+    "historyText1": "Today the Foundation operates from a three-story building in Soacha, where lunch is served daily to 115 boys and girls between 4 and 14 years old, 16 elderly adults, 11 expectant mothers and 2 children with disabilities.",
+    "historyText2": "After a careful restructuring, the parish entrusted the mission to the Sisters of the Child Jesus of Prague — four in total — who oversee the organization, direction, planning and execution of the daily work in favor of the neediest people of the area.",
+    "galleryTitle": "The mission, in pictures",
+    "photoBuilding": "Three-story building of the Buenos Aires Foundation in Soacha",
+    "photoHall": "Foundation dining hall during the daily lunch",
+    "photoMothers": "Care for expectant mothers at the Foundation",
+    "photoElders": "Elderly adults sharing lunch at the Foundation"
   },
   "ParishLife": {
     "heroTitle": "Parish Life",

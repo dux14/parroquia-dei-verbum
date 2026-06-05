@@ -5,14 +5,23 @@ const withNextIntl = createNextIntlPlugin("./src/i18n/request.ts");
 
 const nextConfig: NextConfig = {
   images: {
-    formats: ["image/avif", "image/webp"],
-    minimumCacheTTL: 2678400, // 31 days — optimized images cached at CDN edge
+    formats: ["image/webp"], // webp only — halves transformations vs avif+webp (Vercel quota)
+    minimumCacheTTL: 31536000, // 1 year — site photos rarely change; avoids re-transformations
     deviceSizes: [640, 828, 1080, 1200],
     imageSizes: [16, 32, 48, 64, 96, 128, 256],
   },
   headers: async () => [
     {
       source: "/images/:path*",
+      headers: [
+        {
+          key: "Cache-Control",
+          value: "public, max-age=31536000, immutable",
+        },
+      ],
+    },
+    {
+      source: "/fundacion/:path*",
       headers: [
         {
           key: "Cache-Control",

@@ -87,7 +87,15 @@
     "helpClothes": "Ropa en buen estado",
     "helpMoney": "Aportes económicos",
     "helpContact": "Coordina tu donación con el despacho parroquial:",
-    "externalCta": "Conoce la historia completa en el sitio de la Arquidiócesis"
+    "externalCta": "Conoce la historia completa en el sitio de la Arquidiócesis",
+    "historyTitle": "Una obra con historia",
+    "historyText1": "Hoy la Fundación cuenta con una edificación de tres pisos en Soacha, donde se ofrece diariamente el almuerzo a 115 niños y niñas entre los 4 y 14 años, 16 abuelitos, 11 madres gestantes y 2 niños con discapacidad.",
+    "historyText2": "Tras una cuidadosa reestructuración, la parroquia encargó la obra a las Hermanas de El Niño Jesús de Praga —cuatro en total—, quienes atienden la organización, dirección, planificación y ejecución de las labores diarias en favor de las personas de escasos recursos del sector.",
+    "galleryTitle": "La obra, en imágenes",
+    "photoBuilding": "Edificio de tres pisos de la Fundación Buenos Aires en Soacha",
+    "photoHall": "Comedor de la Fundación durante el almuerzo diario",
+    "photoMothers": "Atención a madres gestantes en la Fundación",
+    "photoElders": "Abuelitos compartiendo el almuerzo en la Fundación"
   },
   "ParishLife": {
     "heroTitle": "Vida Parroquial",

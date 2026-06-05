@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { getTranslations } from "next-intl/server";
 
 const FOUNDATION_ARTICLE_URL =
@@ -14,11 +15,17 @@ export default async function FundacionPage() {
   ];
 
   const services = [
-    { icon: "restaurant", title: t("serviceMeals"), text: t("serviceMealsText") },
-    { icon: "school", title: t("serviceSchool"), text: t("serviceSchoolText") },
-    { icon: "computer", title: t("serviceComputers"), text: t("serviceComputersText") },
-    { icon: "content_cut", title: t("serviceSewing"), text: t("serviceSewingText") },
-    { icon: "checkroom", title: t("serviceCloset"), text: t("serviceClosetText") },
+    { icon: "restaurant", title: t("serviceMeals"), text: t("serviceMealsText"), image: "/fundacion/comedor-ninos.jpg" },
+    { icon: "school", title: t("serviceSchool"), text: t("serviceSchoolText"), image: "/fundacion/biblioteca.jpg" },
+    { icon: "computer", title: t("serviceComputers"), text: t("serviceComputersText"), image: "/fundacion/computo.jpg" },
+    { icon: "content_cut", title: t("serviceSewing"), text: t("serviceSewingText"), image: "/fundacion/costura.jpg" },
+    { icon: "checkroom", title: t("serviceCloset"), text: t("serviceClosetText"), image: "/fundacion/roperito.jpg" },
+  ];
+
+  const gallery = [
+    { src: "/fundacion/comedor-salon.jpg", alt: t("photoHall") },
+    { src: "/fundacion/madres.jpg", alt: t("photoMothers") },
+    { src: "/fundacion/abuelitos.jpg", alt: t("photoElders") },
   ];
 
   return (
@@ -60,6 +67,28 @@ export default async function FundacionPage() {
         </div>
       </section>
 
+      {/* Historia */}
+      <section className="py-12 px-4 md:px-6 max-w-[1200px] mx-auto">
+        <div className="flex flex-col lg:flex-row gap-10 items-center">
+          <div className="lg:w-1/2 w-full">
+            <Image
+              src="/fundacion/edificio.jpg"
+              alt={t("photoBuilding")}
+              width={960}
+              height={725}
+              className="rounded-3xl soft-shadow w-full h-auto object-cover"
+            />
+          </div>
+          <div className="lg:w-1/2">
+            <h2 className="font-headline text-[32px] leading-[40px] font-semibold text-primary mb-6">
+              {t("historyTitle")}
+            </h2>
+            <p className="text-[16px] leading-[26px] text-on-surface-variant mb-4">{t("historyText1")}</p>
+            <p className="text-[16px] leading-[26px] text-on-surface-variant">{t("historyText2")}</p>
+          </div>
+        </div>
+      </section>
+
       {/* Servicios */}
       <section className="py-12 px-4 md:px-6 max-w-[1200px] mx-auto">
         <h2 className="font-headline text-[32px] leading-[40px] font-semibold text-primary mb-8 text-center">
@@ -67,11 +96,39 @@ export default async function FundacionPage() {
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {services.map((service) => (
-            <div key={service.icon} className="bg-surface-container-lowest rounded-xl p-8 soft-shadow border-l-2 border-pew-oak">
-              <span className="material-symbols-outlined text-altar-gold text-[32px] mb-4" aria-hidden="true">{service.icon}</span>
-              <h3 className="font-headline text-[20px] leading-[28px] font-semibold text-primary mb-2">{service.title}</h3>
-              <p className="text-[16px] leading-[24px] text-on-surface-variant">{service.text}</p>
+            <div key={service.icon} className="bg-surface-container-lowest rounded-xl overflow-hidden soft-shadow border-l-2 border-pew-oak">
+              <Image
+                src={service.image}
+                alt={service.title}
+                width={640}
+                height={420}
+                className="w-full h-44 object-cover"
+              />
+              <div className="p-8">
+                <span className="material-symbols-outlined text-altar-gold text-[32px] mb-4" aria-hidden="true">{service.icon}</span>
+                <h3 className="font-headline text-[20px] leading-[28px] font-semibold text-primary mb-2">{service.title}</h3>
+                <p className="text-[16px] leading-[24px] text-on-surface-variant">{service.text}</p>
+              </div>
             </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Galería */}
+      <section className="py-12 px-4 md:px-6 max-w-[1200px] mx-auto">
+        <h2 className="font-headline text-[32px] leading-[40px] font-semibold text-primary mb-8 text-center">
+          {t("galleryTitle")}
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {gallery.map((photo) => (
+            <Image
+              key={photo.src}
+              src={photo.src}
+              alt={photo.alt}
+              width={640}
+              height={480}
+              className="rounded-2xl soft-shadow w-full h-64 object-cover"
+            />
           ))}
         </div>
       </section>
