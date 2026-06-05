@@ -190,7 +190,7 @@ export default async function HomePage() {
             <h2 className="font-headline text-[32px] leading-[40px] font-semibold text-white mb-4">
               {t("foundationShortcutTitle")}
             </h2>
-            <p className="text-[16px] leading-[24px] text-white/85 mb-6 max-w-xl">{t("foundationShortcutText")}</p>
+            <p className="text-[16px] leading-[24px] text-white/80 mb-6 max-w-xl">{t("foundationShortcutText")}</p>
             <Link
               href="/fundacion"
               className="inline-flex items-center gap-2 bg-altar-gold text-surface-container-lowest px-6 py-3 rounded-full text-[14px] tracking-[0.05em] font-semibold hover:bg-[#b5952f] transition-colors"
@@ -205,7 +205,7 @@ export default async function HomePage() {
               { value: "16", label: t("foundationStatElders") },
               { value: "11", label: t("foundationStatMothers") },
             ].map((stat) => (
-              <div key={stat.label} className="bg-white/10 rounded-2xl px-4 py-5 min-w-[100px]">
+              <div key={stat.value} className="bg-white/10 rounded-2xl px-4 py-5 min-w-[100px]">
                 <p className="font-headline text-[32px] leading-[40px] font-bold text-altar-gold">{stat.value}</p>
                 <p className="text-[12px] leading-[16px] text-white/80 mt-1">{stat.label}</p>
               </div>
