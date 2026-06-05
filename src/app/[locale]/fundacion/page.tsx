@@ -1,7 +1,7 @@
 import { getTranslations } from "next-intl/server";
 
 const FOUNDATION_ARTICLE_URL =
-  "https://pdeiverbum.arquibogota.org.co/centro-de-informacion/articulos/fundacion-buenos-aires?shem=rimspwouoe";
+  "https://pdeiverbum.arquibogota.org.co/centro-de-informacion/articulos/fundacion-buenos-aires";
 
 export default async function FundacionPage() {
   const t = await getTranslations("Foundation");

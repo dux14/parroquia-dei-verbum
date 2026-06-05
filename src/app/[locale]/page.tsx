@@ -165,12 +165,12 @@ export default async function HomePage() {
               <h3 className="font-headline text-[24px] leading-[32px] font-semibold text-primary mb-6 text-center">Selecciona tu donación</h3>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
                 {["$10", "$25", "$50", t("otherAmount")].map((amount) => (
-                  <button key={amount} className="bg-surface text-on-surface border border-outline-variant hover:border-altar-gold hover:text-altar-gold rounded-xl py-3 font-semibold text-[14px] tracking-[0.05em] transition-all focus:ring-2 focus:ring-altar-gold outline-none">
+                  <button type="button" key={amount} className="bg-surface text-on-surface border border-outline-variant hover:border-altar-gold hover:text-altar-gold rounded-xl py-3 font-semibold text-[14px] tracking-[0.05em] transition-all focus:ring-2 focus:ring-altar-gold outline-none">
                     {amount}
                   </button>
                 ))}
               </div>
-              <button className="w-full bg-altar-gold text-surface-container-lowest font-semibold text-[14px] tracking-[0.05em] py-4 rounded-xl hover:bg-[#b5952f] transition-colors shadow-lg flex justify-center items-center gap-2">
+              <button type="button" className="w-full bg-altar-gold text-surface-container-lowest font-semibold text-[14px] tracking-[0.05em] py-4 rounded-xl hover:bg-[#b5952f] transition-colors shadow-lg flex justify-center items-center gap-2">
                 {t("donateButton")}
                 <span className="material-symbols-outlined">volunteer_activism</span>
               </button>

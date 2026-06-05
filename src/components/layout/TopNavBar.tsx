@@ -23,8 +23,6 @@ export default function TopNavBar() {
   const locale = useLocale();
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  const otherLocale = locale === "es" ? "en" : "es";
-
   return (
     <>
       <header className="bg-surface/80 backdrop-blur-md shadow-sm fixed top-0 w-full z-50 border-b border-outline-variant/30">

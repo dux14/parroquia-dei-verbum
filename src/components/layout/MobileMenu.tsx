@@ -25,7 +25,6 @@ export default function MobileMenu({
   const t = useTranslations("Navigation");
   const pathname = usePathname();
   const locale = useLocale();
-  const otherLocale = locale === "es" ? "en" : "es";
 
   useEffect(() => {
     if (open) {
