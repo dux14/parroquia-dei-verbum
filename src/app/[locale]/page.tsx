@@ -179,6 +179,41 @@ export default async function HomePage() {
         </div>
       </section>
 
+      {/* Fundación Buenos Aires — shortcut */}
+      <section className="py-12 px-4 md:px-6 max-w-[1200px] mx-auto mb-10">
+        <div className="bg-primary rounded-3xl p-8 md:p-12 soft-shadow relative overflow-hidden flex flex-col lg:flex-row items-center gap-10">
+          <div className="absolute -right-16 -top-16 w-56 h-56 bg-altar-gold/10 rounded-full blur-3xl z-0" />
+          <div className="flex-1 relative z-10">
+            <span className="text-[14px] leading-[20px] tracking-[0.05em] font-semibold text-altar-gold uppercase mb-3 block">
+              {t("foundationShortcutEyebrow")}
+            </span>
+            <h2 className="font-headline text-[32px] leading-[40px] font-semibold text-white mb-4">
+              {t("foundationShortcutTitle")}
+            </h2>
+            <p className="text-[16px] leading-[24px] text-white/85 mb-6 max-w-xl">{t("foundationShortcutText")}</p>
+            <Link
+              href="/fundacion"
+              className="inline-flex items-center gap-2 bg-altar-gold text-surface-container-lowest px-6 py-3 rounded-full text-[14px] tracking-[0.05em] font-semibold hover:bg-[#b5952f] transition-colors"
+            >
+              {t("foundationShortcutCta")}
+              <span className="material-symbols-outlined text-sm" aria-hidden="true">arrow_forward</span>
+            </Link>
+          </div>
+          <div className="relative z-10 grid grid-cols-3 gap-4 text-center">
+            {[
+              { value: "115", label: t("foundationStatChildren") },
+              { value: "16", label: t("foundationStatElders") },
+              { value: "11", label: t("foundationStatMothers") },
+            ].map((stat) => (
+              <div key={stat.label} className="bg-white/10 rounded-2xl px-4 py-5 min-w-[100px]">
+                <p className="font-headline text-[32px] leading-[40px] font-bold text-altar-gold">{stat.value}</p>
+                <p className="text-[12px] leading-[16px] text-white/80 mt-1">{stat.label}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Lectio Divina — live from Ordo API */}
       <section className="py-12 px-4 md:px-6 max-w-[1200px] mx-auto bg-surface-mist rounded-3xl mb-20 relative overflow-hidden">
         <div className="absolute inset-0 opacity-5" style={{ backgroundImage: "radial-gradient(#003e6f 1px, transparent 1px)", backgroundSize: "20px 20px" }} />
