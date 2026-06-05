@@ -13,6 +13,7 @@ const navLinks = [
   { href: "/lecturas", labelKey: "lecturas" },
   { href: "/oraciones", labelKey: "oraciones" },
   { href: "/sacramentos", labelKey: "sacramentos" },
+  { href: "/fundacion", labelKey: "fundacion" },
   { href: "/contacto", labelKey: "contacto" },
 ] as const;
 

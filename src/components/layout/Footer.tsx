@@ -47,6 +47,9 @@ export default function Footer() {
               <Link href="/sacramentos" className="text-surface-mist/80 hover:text-white transition-colors">
                 {nav("sacramentos")}
               </Link>
+              <Link href="/fundacion" className="text-surface-mist/80 hover:text-white transition-colors">
+                {nav("fundacion")}
+              </Link>
               <Link href="/contacto" className="text-surface-mist/80 hover:text-white transition-colors">
                 {nav("contacto")}
               </Link>
