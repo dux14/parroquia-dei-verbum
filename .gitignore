@@ -45,4 +45,6 @@ docs/
 .superpowers
 agents.md
 CLAUDE.md
+.claude/graphify-out/
+graphify-out/
 .claude/
