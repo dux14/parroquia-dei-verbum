@@ -1,11 +1,6 @@
 import { unstable_cache } from "next/cache";
-import { extractVideoId } from "@/lib/youtube";
 
 const CHANNEL_ID = "UCxENqnnNPigauO91jVmEcXA";
-
-// Nombre del canal tal cual lo expone YouTube en videoDetails.author. Aserción
-// dura: si el video servido no pertenece a este canal, se rechaza.
-const EXPECTED_CHANNEL_NAME = "Parroquia Dei Verbum Bogotá";
 
 // Único intervalo: alinea (a) TTL de caché del scrape, (b) delta de nextCheck
 // mientras se sondea, (c) cadencia de re-sondeo del cliente.
@@ -134,112 +129,56 @@ export function expectedDateFragment(now: Date): string {
   }).format(now);
 }
 
-// Decodifica el contenido de un string JSON capturado con escapes intactos
-// (\uXXXX, \", \\, …). El grupo proviene de un patrón balanceado, así que
-// re-parsear como string JSON es seguro; ante cualquier rareza, deja el crudo.
-function jsonUnescape(raw: string): string {
-  try {
-    return JSON.parse(`"${raw}"`);
-  } catch {
-    return raw;
-  }
-}
-
-function decodeHtmlEntities(s: string): string {
+function decodeXmlEntities(s: string): string {
   return s
     .replace(/&amp;/g, "&")
     .replace(/&quot;/g, '"')
+    .replace(/&apos;/g, "'")
     .replace(/&#39;/g, "'")
     .replace(/&lt;/g, "<")
     .replace(/&gt;/g, ">");
 }
 
-// Resultado de evaluar las aserciones de identidad sobre un HTML de live.
-export interface LiveAssertion {
-  videoId: string | null;
-  author: string;
-  title: string;
-  channelOk: boolean;
-  dateOk: boolean;
-  accepted: boolean;
-  reason:
-    | "accepted"
-    | "no-video-id"
-    | "channel-mismatch"
-    | "title-date-mismatch";
-}
-
-// Lógica pura (sin red): extrae videoId/título/autor del MISMO bloque videoDetails
-// y exige (1) canal === EXPECTED_CHANNEL_NAME y (2) que el título contenga la fecha
-// de hoy. Testeable contra fixtures HTML.
-export function assertLiveIdentity(html: string, now: Date): LiveAssertion {
-  let videoId: string | null = null;
-  let title = "";
-
-  // videoId + título atados al mismo video (videoDetails empieza por videoId,
-  // seguido inmediatamente por title).
-  const details = html.match(
-    /"videoDetails":\{"videoId":"([a-zA-Z0-9_-]{11})","title":"((?:[^"\\]|\\.)*)"/
-  );
-  if (details) {
-    videoId = details[1];
-    title = jsonUnescape(details[2]);
-  } else {
-    const canonical = html.match(/<link rel="canonical" href="([^"]+)"/);
-    if (canonical) videoId = extractVideoId(canonical[1]);
-    if (!videoId) {
-      const fb = html.match(/"videoId":"([a-zA-Z0-9_-]{11})"/);
-      if (fb) videoId = fb[1];
+// Lógica pura (sin red): parsea las entradas del feed Atom del canal y devuelve
+// el primer video cuyo título contiene la fecha de hoy en Bogotá — es la misa
+// del día. El feed va por channel_id, así que la identidad del canal está
+// garantizada por la fuente: no hace falta verificar autor. Testeable con
+// fixtures XML.
+export function findTodaysMass(
+  xml: string,
+  now: Date
+): { videoId: string | null; title: string } {
+  const expected = normalizeText(expectedDateFragment(now));
+  const entries = xml.matchAll(/<entry>([\s\S]*?)<\/entry>/g);
+  for (const [, block] of entries) {
+    const vid = block.match(/<yt:videoId>([a-zA-Z0-9_-]{11})<\/yt:videoId>/);
+    const tit = block.match(/<title>([\s\S]*?)<\/title>/);
+    if (!vid || !tit) continue;
+    const title = decodeXmlEntities(tit[1]).trim();
+    if (normalizeText(title).includes(expected)) {
+      return { videoId: vid[1], title };
     }
   }
-  if (!title) {
-    const og = html.match(/<meta property="og:title" content="([^"]*)"/);
-    if (og) title = decodeHtmlEntities(og[1]);
-  }
-
-  let author = "";
-  const authorMatch = html.match(/"author":"((?:[^"\\]|\\.)*)"/);
-  if (authorMatch) author = jsonUnescape(authorMatch[1]);
-
-  const channelOk = author.trim() === EXPECTED_CHANNEL_NAME;
-  const dateOk = normalizeText(title).includes(
-    normalizeText(expectedDateFragment(now))
-  );
-
-  let reason: LiveAssertion["reason"];
-  let accepted = false;
-  if (!videoId) reason = "no-video-id";
-  else if (!channelOk) reason = "channel-mismatch";
-  else if (!dateOk) reason = "title-date-mismatch";
-  else {
-    reason = "accepted";
-    accepted = true;
-  }
-
-  return { videoId, author, title, channelOk, dateOk, accepted, reason };
+  return { videoId: null, title: "" };
 }
 
-// Scrape sin API key. En vivo sólo si el cuerpo marca isLiveNow/isLive Y las
-// aserciones de identidad pasan (canal + fecha del título). Cualquier fallo o
-// no-coincidencia → no en vivo, y el siguiente sondeo reintenta. Nunca lanza.
-// Emite una traza [live-track] por intento para diagnóstico (vercel logs).
-async function scrapeLiveStatus(): Promise<{
+// Detección vía feed RSS público del canal (sin API key). A diferencia de
+// scrapear /channel/{id}/live —que YouTube intercepta desde IPs de datacenter y
+// sirve lives ajenos sin videoDetails—, el feed Atom es estable desde cualquier
+// IP y va atado a channel_id. Durante la ventana de misa, si el feed lista un
+// video con la fecha de hoy en el título, esa es la transmisión del día. Nunca
+// lanza. Emite una traza [live-track] por intento para diagnóstico.
+async function fetchLiveStatusFromFeed(): Promise<{
   isLive: boolean;
   videoId: string | null;
 }> {
   const now = new Date();
   const ts = now.toISOString();
+  const expectedDate = expectedDateFragment(now);
   try {
     const res = await fetch(
-      `https://www.youtube.com/channel/${CHANNEL_ID}/live`,
-      {
-        headers: {
-          "User-Agent":
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-          "Accept-Language": "es-CO,es",
-        },
-        cache: "no-store",
-      }
+      `https://www.youtube.com/feeds/videos.xml?channel_id=${CHANNEL_ID}`,
+      { cache: "no-store" }
     );
     if (!res.ok) {
       console.warn(
@@ -248,34 +187,21 @@ async function scrapeLiveStatus(): Promise<{
       return { isLive: false, videoId: null };
     }
 
-    const html = await res.text();
-    const liveFlag =
-      html.includes('"isLiveNow":true') || html.includes('"isLive":true');
-    if (!liveFlag) {
-      console.log(
-        `[live-track] ${JSON.stringify({ ts, accepted: false, reason: "not-live" })}`
-      );
-      return { isLive: false, videoId: null };
-    }
-
-    const r = assertLiveIdentity(html, now);
+    const xml = await res.text();
+    const { videoId, title } = findTodaysMass(xml, now);
+    const accepted = videoId !== null;
     const line = JSON.stringify({
       ts,
-      videoId: r.videoId,
-      author: r.author,
-      title: r.title,
-      expectedChannel: EXPECTED_CHANNEL_NAME,
-      expectedDate: expectedDateFragment(now),
-      channelOk: r.channelOk,
-      dateOk: r.dateOk,
-      accepted: r.accepted,
-      reason: r.reason,
+      videoId,
+      title,
+      expectedDate,
+      accepted,
+      reason: accepted ? "accepted" : "no-mass-today",
     });
-    if (r.accepted) console.log(`[live-track] ${line}`);
+    if (accepted) console.log(`[live-track] ${line}`);
     else console.warn(`[live-track] ${line}`);
 
-    if (!r.accepted) return { isLive: false, videoId: null };
-    return { isLive: true, videoId: r.videoId };
+    return { isLive: accepted, videoId };
   } catch (err) {
     console.warn(
       `[live-track] ${JSON.stringify({ ts, accepted: false, reason: "fetch-failed", error: String(err) })}`
@@ -285,9 +211,9 @@ async function scrapeLiveStatus(): Promise<{
 }
 
 // Caché compartida entre peticiones (anti thundering herd): N clientes
-// concurrentes dentro del intervalo provocan a lo sumo UN fetch a YouTube.
+// concurrentes dentro del intervalo provocan a lo sumo UN fetch al feed.
 const getCachedLiveStatus = unstable_cache(
-  scrapeLiveStatus,
+  fetchLiveStatusFromFeed,
   ["youtube-live-status"],
   { revalidate: POLL_INTERVAL_SECONDS }
 );
